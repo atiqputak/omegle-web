@@ -1,0 +1,137 @@
+from pathlib import Path
+
+html = r'''<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080809">
+<meta name="description" content="OMEGLE — چت تصادفی متنی و تصویری">
+<title>OMEGLE — Random Chat</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{color-scheme:dark;--bg:#080809;--panel:#111114;--panel2:#17171b;--red:#ff294b;--red2:#b90d2b;--text:#f7f7f8;--muted:#9999a5;--line:#292930;--green:#45e0a0}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif}body{min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#321019 0,transparent 38%),var(--bg)}button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:2px solid var(--red);outline-offset:3px}.app{width:min(100%,760px);min-height:100vh;margin:auto;padding:20px 18px 16px;display:flex;flex-direction:column}.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #ffffff12;padding:4px 0 18px}.brand{font-size:20px;font-weight:900;letter-spacing:1.5px}.brand span{color:var(--red)}.topbar-right{display:flex;align-items:center;gap:16px}.online{display:flex;align-items:center;gap:8px;color:#c8c8cf;font-size:11px;letter-spacing:1px}.online i{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 12px #45e0a077}.language-switch{display:flex;padding:3px;border:1px solid var(--line);border-radius:10px;background:#111}.lang-option{border:0;border-radius:7px;padding:6px 10px;background:transparent;color:var(--muted);font-size:12px}.lang-option.active{background:#32101a;color:#fff}.main{flex:1;display:flex;align-items:center}.home{width:100%;position:relative;text-align:center;padding:44px 0 28px}.hero-glow{position:absolute;width:260px;height:260px;left:50%;top:35px;transform:translateX(-50%);background:#d10f3620;filter:blur(70px);pointer-events:none}.globe{position:relative;margin:0 auto 22px;width:74px;height:74px;border:1px solid #ff294b70;border-radius:24px;display:grid;place-items:center;color:var(--red);font-size:44px;box-shadow:0 0 50px #ff294b12}.eyebrow{position:relative;color:var(--red);font-size:11px;letter-spacing:2.2px;font-weight:800}.home h1{position:relative;font-size:clamp(36px,8vw,62px);line-height:1.2;letter-spacing:-1.8px;margin:18px 0}.home h1 span{color:var(--red)}.description{position:relative;color:#b7b7c0;font-size:15px;line-height:1.9;max-width:420px;margin:0 auto 28px}.home-actions{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:470px;margin:0 auto}.primary,.secondary,.end-button,.camera-button{min-height:52px;padding:13px 16px;border-radius:14px;font-weight:750;border:1px solid transparent;display:flex;align-items:center;justify-content:center;gap:12px}.primary{background:linear-gradient(135deg,var(--red),var(--red2));color:#fff;box-shadow:0 8px 30px #ff294b24}.secondary{background:#151519;border-color:#33333b;color:#f3f3f6}.primary:hover,.camera-button:hover{filter:brightness(1.08)}.secondary:hover{border-color:#6b2a39}.feature-row{display:flex;justify-content:center;gap:26px;margin:30px 0 20px;color:#c9c9d0;font-size:13px}.feature{display:flex;align-items:center;gap:8px}.feature-icon{color:var(--red);font-size:20px}.privacy{max-width:490px;margin:0 auto;background:#141114;border:1px solid #ff294b24;color:#c7bbc0;border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.8;display:flex;justify-content:center;gap:8px}.privacy span:first-child{color:var(--red)}.chat{width:100%;padding:18px 0 12px}.hidden{display:none!important}.chat-heading{display:flex;align-items:center;gap:12px;margin-bottom:16px}.back,.report{border:1px solid var(--line);background:#151519;color:#fff;border-radius:11px;min-width:42px;height:42px}.chat-heading-info{flex:1;min-width:0}.chat-title{font-weight:800}.chat-subtitle{font-size:12px;color:var(--muted);margin-top:4px}.report{padding:0 12px;color:#ff7187;font-size:12px}.video-area{margin-bottom:14px}.video-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.video-card{position:relative;min-height:155px;aspect-ratio:4/3;background:#0d0d10;border:1px solid #292930;border-radius:16px;overflow:hidden}.video-card video{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;background:#080809}.video-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px;background:linear-gradient(145deg,#17171d,#0c0c0f)}.video-placeholder p{margin:9px 0 3px;font-size:13px}.video-placeholder small{color:var(--muted);font-size:10px;line-height:1.5}.camera-icon{font-size:26px;color:var(--red)}.video-label{position:absolute;bottom:8px;right:8px;background:#0009;border:1px solid #ffffff18;border-radius:7px;padding:4px 8px;font-size:10px}.video-status{color:var(--muted);font-size:12px;padding:10px 2px;text-align:center}.camera-button{width:100%;background:#32101a;border-color:#792034;color:#fff;min-height:44px}.messages{height:min(38vh,340px);min-height:190px;overflow:auto;display:flex;flex-direction:column;gap:10px;padding:14px;background:#0d0d10;border:1px solid var(--line);border-radius:16px;scroll-behavior:smooth}.system-message{text-align:center;color:var(--muted);font-size:12px;line-height:1.7;padding:8px}.message{max-width:84%;padding:10px 13px;border-radius:14px;line-height:1.65;font-size:14px;overflow-wrap:anywhere}.message.mine{align-self:flex-start;background:#5b1426;border:1px solid #a92743}.message.theirs{align-self:flex-end;background:#1b1b21;border:1px solid #303038}.message-form{display:flex;gap:9px;margin:10px 0}.message-form input{min-width:0;flex:1;background:#151519;border:1px solid #303038;border-radius:13px;padding:13px 14px;color:#fff}.message-form input::placeholder{color:#7f7f8a}.message-form button{width:48px;border:0;border-radius:13px;background:var(--red);color:white;font-size:20px}.chat-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.chat-actions button{min-height:44px;font-size:13px}.end-button{background:#171114;border-color:#54202d;color:#ff8a9b}footer{display:flex;justify-content:center;align-items:center;gap:8px;color:#74747f;font-size:11px;padding:18px 0 2px}footer span:first-child{font-weight:900;letter-spacing:1px;color:#b9b9c2}.footer-dot{color:var(--red)}.toast{position:fixed;z-index:10;bottom:22px;left:50%;transform:translateX(-50%);max-width:calc(100vw - 32px);padding:12px 16px;border-radius:12px;background:#242429;border:1px solid #45454e;color:#fff;font-size:13px;box-shadow:0 12px 40px #0008;text-align:center}.app[dir="ltr"] .video-label{right:auto;left:8px}.app[dir="ltr"] .message.mine{align-self:flex-end}.app[dir="ltr"] .message.theirs{align-self:flex-start}.app[dir="ltr"] .privacy{direction:ltr}
+@media(max-width:480px){.app{padding:14px 13px 10px}.topbar{padding-bottom:14px}.online{font-size:9px;letter-spacing:.7px}.topbar-right{gap:10px}.home{padding:32px 0 20px}.home h1{letter-spacing:-1px}.description{font-size:14px}.home-actions{grid-template-columns:1fr}.primary,.secondary{min-height:49px}.feature-row{gap:15px;font-size:12px}.video-card{min-height:125px}.messages{height:34vh;min-height:170px}.chat{padding-top:12px}}
+@media(prefers-reduced-motion:no-preference){.globe{animation:pulse 4s ease-in-out infinite}@keyframes pulse{50%{box-shadow:0 0 50px #ff294b24;transform:translateY(-2px)}}}
+</style>
+</head>
+<body>
+<div class="app" id="app" lang="fa" dir="rtl">
+<header class="topbar">
+  <div class="brand">OMEGLE<span>.</span></div>
+  <div class="topbar-right">
+    <div class="online"><i></i><span data-fa="چت تصادفی" data-en="RANDOM CHAT">چت تصادفی</span></div>
+    <div class="language-switch" aria-label="انتخاب زبان">
+      <button type="button" id="langFa" class="lang-option active" aria-pressed="true">فا</button>
+      <button type="button" id="langEn" class="lang-option" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</header>
+<main class="main">
+<section class="home" id="home">
+  <div class="hero-glow" aria-hidden="true"></div><div class="globe" aria-hidden="true">◎</div>
+  <p class="eyebrow" data-fa="دنیای تو. ارتباط تو." data-en="YOUR WORLD. YOUR CONNECTION.">دنیای تو. ارتباط تو.</p>
+  <h1 data-fa="با دنیای جدید<br><span>آشنا شو.</span>" data-en="MEET SOMEONE<br><span>NEW.</span>">با دنیای جدید<br><span>آشنا شو.</span></h1>
+  <p class="description" data-fa="با افراد جدید آشنا شو و گفت‌وگوهای تازه‌ای را شروع کن." data-en="Meet new people and start a conversation.">با افراد جدید آشنا شو و گفت‌وگوهای تازه‌ای را شروع کن.</p>
+  <div class="home-actions">
+    <button class="primary" id="findText" type="button"><span data-fa="شروع چت متنی" data-en="Start Text Chat">شروع چت متنی</span><span aria-hidden="true">↗</span></button>
+    <button class="secondary" id="findVideo" type="button"><span data-fa="شروع چت تصویری" data-en="Start Video Chat">شروع چت تصویری</span><span aria-hidden="true">◉</span></button>
+  </div>
+  <div class="feature-row">
+    <div class="feature"><span class="feature-icon">◎</span><span data-fa="گفت‌وگوی تصادفی" data-en="Random chat">گفت‌وگوی تصادفی</span></div>
+    <div class="feature"><span class="feature-icon">◇</span><span data-fa="حفظ حریم خصوصی" data-en="Privacy first">حفظ حریم خصوصی</span></div>
+  </div>
+  <div class="privacy"><span aria-hidden="true">♢</span><span data-fa="اطلاعات شخصی و رمزهای خود را به افراد ناشناس نده." data-en="Never share personal information or passwords.">اطلاعات شخصی و رمزهای خود را به افراد ناشناس نده.</span></div>
+</section>
+<section class="chat hidden" id="chat">
+  <div class="chat-heading">
+    <button class="back" id="backHome" type="button" aria-label="بازگشت">←</button>
+    <div class="chat-heading-info"><div class="chat-title" id="chatTitle" data-fa="چت تصادفی" data-en="Random Chat">چت تصادفی</div><div class="chat-subtitle" id="chatSubtitle" data-fa="در حال اتصال..." data-en="Connecting...">در حال اتصال...</div></div>
+    <button class="report" id="reportBtn" type="button" data-fa="گزارش" data-en="Report">گزارش</button>
+  </div>
+  <div class="video-area hidden" id="videoArea">
+    <div class="video-grid">
+      <div class="video-card remote-video-card"><video id="remoteVideo" autoplay playsinline aria-label="تصویر طرف مقابل"></video><div class="video-placeholder" id="remoteVideoPlaceholder"><div class="camera-icon">◉</div><p data-fa="تصویر طرف مقابل" data-en="Stranger's video">تصویر طرف مقابل</p><small data-fa="منتظر برقراری تماس..." data-en="Waiting for video connection...">منتظر برقراری تماس...</small></div><div class="video-label" data-fa="طرف مقابل" data-en="Stranger">طرف مقابل</div></div>
+      <div class="video-card local-video-card"><video id="localVideo" autoplay muted playsinline aria-label="تصویر خودم"></video><div class="video-placeholder" id="videoPlaceholder"><div class="camera-icon">◉</div><p data-fa="دوربین شما" data-en="Your camera">دوربین شما</p><small data-fa="برای شروع، دوربین را فعال کن." data-en="Enable your camera to begin.">برای شروع، دوربین را فعال کن.</small></div><div class="video-label" data-fa="شما" data-en="You">شما</div></div>
+    </div>
+    <div class="video-status" id="videoStatus" role="status">تماس تصویری هنوز برقرار نشده است.</div>
+    <button class="camera-button" id="cameraBtn" type="button" data-fa="فعال‌کردن دوربین و میکروفون" data-en="Enable Camera & Microphone">فعال‌کردن دوربین و میکروفون</button>
+  </div>
+  <div class="messages" id="messages" aria-live="polite"><div class="system-message" data-fa="برای گفت‌وگو، ابتدا به یک کاربر متصل شو." data-en="Connect with a user to start chatting.">برای گفت‌وگو، ابتدا به یک کاربر متصل شو.</div></div>
+  <form class="message-form" id="messageForm" autocomplete="off"><input id="messageInput" name="message" type="text" maxlength="1000" placeholder="پیامت را بنویس..." data-placeholder-fa="پیامت را بنویس..." data-placeholder-en="Type your message..." autocomplete="off" aria-label="پیام"><button id="sendMessageBtn" type="submit" aria-label="ارسال پیام">➤</button></form>
+  <div class="chat-actions"><button class="secondary" id="nextBtn" type="button"><span data-fa="نفر بعدی" data-en="Next person">نفر بعدی</span><span aria-hidden="true">↻</span></button><button class="end-button" id="endBtn" type="button" data-fa="پایان گفتگو" data-en="End Chat">پایان گفتگو</button></div>
+</section>
+</main>
+<footer><span>OMEGLE</span><span class="footer-dot">•</span><span data-fa="با احترام ارتباط برقرار کن" data-en="CONNECT WITH RESPECT">با احترام ارتباط برقرار کن</span></footer>
+<div class="toast hidden" id="toast" role="status"></div>
+</div>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const app=$("app"),home=$("home"),chat=$("chat"),chatTitle=$("chatTitle"),chatSubtitle=$("chatSubtitle"),messages=$("messages"),messageForm=$("messageForm"),messageInput=$("messageInput"),videoArea=$("videoArea"),localVideo=$("localVideo"),remoteVideo=$("remoteVideo"),videoPlaceholder=$("videoPlaceholder"),remoteVideoPlaceholder=$("remoteVideoPlaceholder"),videoStatus=$("videoStatus"),cameraBtn=$("cameraBtn"),toast=$("toast");
+const SERVER_URL="wss://omegle-chat-server.onrender.com";
+const required=["home","chat","chatTitle","chatSubtitle","messages","messageForm","messageInput","videoArea","localVideo","remoteVideo","videoPlaceholder","remoteVideoPlaceholder","videoStatus","cameraBtn","toast","findText","findVideo","backHome","nextBtn","endBtn","reportBtn","sendMessageBtn"];
+for(const id of required){if(!$(id)){console.error("OMEGLE: missing element #"+id);return;}}
+let socket=null,mode="text",matched=false,searching=false,localStream=null,peer=null,partnerId=null,toastTimer=null,manualClose=false,language="fa",queuedIce=[];
+const copy={fa:{connecting:"در حال اتصال به سرور...",searching:"در حال جست‌وجوی کاربر...",waiting:"هنوز کاربری پیدا نشده؛ منتظر بمان...",matched:"کاربر پیدا شد؛ می‌توانی گفت‌وگو کنی.",disconnected:"ارتباط با سرور قطع شد. دوباره تلاش کن.",sendFirst:"ابتدا به یک کاربر متصل شو.",videoStart:"برای تماس، دوربین و میکروفون را فعال کن.",cameraReady:"دوربین فعال شد؛ در انتظار تماس تصویری...",cameraDenied:"دسترسی دوربین/میکروفون داده نشد یا در دسترس نیست.",videoConnected:"تماس تصویری برقرار شد.",videoFailed:"اتصال تصویری برقرار نشد؛ ممکن است شبکه به TURN نیاز داشته باشد.",partnerLeft:"کاربر دیگر خارج شد.",ended:"گفت‌وگو پایان یافت.",reportUnavailable:"گزارش‌دهی هنوز به سرور وصل نشده است.",report:"برای ایمنی، اطلاعات شخصی خود را نفرست و تماس را در صورت ناراحتی پایان بده.",empty:"پیام خالی ارسال نمی‌شود.",serverError:"خطا در اتصال به سرور.",you:"شما",stranger:"طرف مقابل",textChat:"چت متنی",videoChat:"چت تصویری",connectingTitle:"در حال اتصال...",searchTitle:"در جست‌وجوی کاربر"},en:{connecting:"Connecting to server...",searching:"Searching for a user...",waiting:"No user found yet; keep waiting...",matched:"User found. You can start chatting.",disconnected:"Server connection lost. Try again.",sendFirst:"Connect with a user first.",videoStart:"Enable your camera and microphone to call.",cameraReady:"Camera enabled; waiting for video connection...",cameraDenied:"Camera/microphone access was denied or is unavailable.",videoConnected:"Video call connected.",videoFailed:"Video connection failed; this network may require a TURN server.",partnerLeft:"The other user left.",ended:"Chat ended.",reportUnavailable:"Reporting is not connected to the server yet.",report:"For your safety, don't share personal information. End the chat if you feel uncomfortable.",empty:"Empty messages cannot be sent.",serverError:"Server connection error.",you:"You",stranger:"Stranger",textChat:"Text Chat",videoChat:"Video Chat",connectingTitle:"Connecting...",searchTitle:"Finding a user"}};
+const t=k=>(copy[language]&&copy[language][k])||copy.fa[k]||k;
+function showToast(text){toast.textContent=text;toast.classList.remove("hidden");clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.add("hidden"),3200);}
+function system(text){const d=document.createElement("div");d.className="system-message";d.textContent=text;messages.appendChild(d);messages.scrollTop=messages.scrollHeight;}
+function addMessage(text,mine){const d=document.createElement("div");d.className="message "+(mine?"mine":"theirs");d.textContent=text;messages.appendChild(d);messages.scrollTop=messages.scrollHeight;}
+function clearMessages(){messages.replaceChildren();system(t("sendFirst"));}
+function translatePage(){app.querySelectorAll("[data-fa][data-en]").forEach(el=>{el.innerHTML=language==="en"?el.getAttribute("data-en"):el.getAttribute("data-fa");});$("langFa").classList.toggle("active",language==="fa");$("langEn").classList.toggle("active",language==="en");$("langFa").setAttribute("aria-pressed",String(language==="fa"));$("langEn").setAttribute("aria-pressed",String(language==="en"));app.lang=language;app.dir=language==="en"?"ltr":"rtl";document.documentElement.lang=language;document.documentElement.dir=app.dir;messageInput.placeholder=language==="en"?messageInput.dataset.placeholderEn:messageInput.dataset.placeholderFa;}
+$("langFa").addEventListener("click",()=>{language="fa";translatePage();});$("langEn").addEventListener("click",()=>{language="en";translatePage();});
+function send(data){if(!socket||socket.readyState!==WebSocket.OPEN){showToast(t("disconnected"));return false;}socket.send(JSON.stringify(data));return true;}
+function cleanupPeer(){if(peer){try{peer.onicecandidate=null;peer.ontrack=null;peer.onconnectionstatechange=null;peer.close();}catch(e){}peer=null;}queuedIce=[];remoteVideo.srcObject=null;remoteVideoPlaceholder.classList.remove("hidden");}
+function stopLocal(){if(localStream){localStream.getTracks().forEach(track=>track.stop());localStream=null;}localVideo.srcObject=null;videoPlaceholder.classList.remove("hidden");}
+function closeConnection(closeSocket=true){manualClose=true;searching=false;matched=false;partnerId=null;cleanupPeer();stopLocal();if(socket&&closeSocket){try{socket.close();}catch(e){}}socket=null;manualClose=false;}
+function openChat(nextMode){mode=nextMode;home.classList.add("hidden");chat.classList.remove("hidden");videoArea.classList.toggle("hidden",mode!=="video");chatTitle.textContent=mode==="video"?t("videoChat"):t("textChat");chatSubtitle.textContent=t("connecting");messages.replaceChildren();system(t("connecting"));$("findText").disabled=$("findVideo").disabled=true;connect();}
+function connect(){closeConnection(true);searching=true;chatSubtitle.textContent=t("connecting");socket=new WebSocket(SERVER_URL);const current=socket;
+current.addEventListener("open",()=>{if(current!==socket)return;chatSubtitle.textContent=t("searching");system(t("searching"));send({type:"find",mode:mode});});
+current.addEventListener("message",async event=>{if(current!==socket)return;let data;try{data=JSON.parse(event.data);}catch(e){console.warn("Unrecognized server message");return;}await handleServerMessage(data);});
+current.addEventListener("error",()=>{if(current===socket){chatSubtitle.textContent=t("serverError");showToast(t("serverError"));}});
+current.addEventListener("close",()=>{if(current!==socket)return;socket=null;if(!manualClose){searching=false;matched=false;chatSubtitle.textContent=t("disconnected");system(t("disconnected"));cleanupPeer();}});
+}
+async function handleServerMessage(data){
+const type=data.type||data.event;
+if(type==="matched"||type==="match"||type==="user_found"){matched=true;searching=false;partnerId=data.partnerId||data.partner_id||data.userId||data.peerId||null;chatSubtitle.textContent=t("matched");system(t("matched"));if(mode==="video"&&localStream)await createPeer(true);}
+else if(type==="waiting"||type==="searching"){searching=true;chatSubtitle.textContent=t("searchTitle");}
+else if(type==="message"){const text=String(data.text??data.message??"").slice(0,1000);if(text)addMessage(text,false);}
+else if(type==="partner_left"||type==="user_left"||type==="disconnected"){matched=false;cleanupPeer();chatSubtitle.textContent=t("partnerLeft");system(t("partnerLeft"));}
+else if(type==="offer"){if(mode!=="video")return;if(!localStream){try{await enableCamera(false);}catch(e){return;}}await createPeer(false);try{await peer.setRemoteDescription(new RTCSessionDescription(data.offer||data));const answer=await peer.createAnswer();await peer.setLocalDescription(answer);send({type:"answer",answer:peer.localDescription});for(const c of queuedIce){try{await peer.addIceCandidate(c);}catch(e){}}queuedIce=[];}catch(e){console.error(e);showToast(t("videoFailed"));}}
+else if(type==="answer"){if(peer){try{await peer.setRemoteDescription(new RTCSessionDescription(data.answer||data));for(const c of queuedIce){try{await peer.addIceCandidate(c);}catch(e){}}queuedIce=[];}catch(e){console.error(e);}}}
+else if(type==="ice-candidate"||type==="candidate"){const candidate=data.candidate;if(candidate&&peer){try{if(peer.remoteDescription)await peer.addIceCandidate(new RTCIceCandidate(candidate));else queuedIce.push(new RTCIceCandidate(candidate));}catch(e){console.warn(e);}}}
+else if(type==="next"||type==="end"){matched=false;cleanupPeer();system(t("partnerLeft"));}
+else if(type==="error"){showToast(String(data.message||t("serverError")));}
+}
+function createPeer(initiator){cleanupPeer();peer=new RTCPeerConnection({iceServers:[{urls:"stun:stun.l.google.com:19302"},{urls:"stun:stun1.l.google.com:19302"}]});const pc=peer;
+if(localStream)localStream.getTracks().forEach(track=>pc.addTrack(track,localStream));
+pc.onicecandidate=e=>{if(e.candidate&&socket&&socket.readyState===WebSocket.OPEN)send({type:"ice-candidate",candidate:e.candidate});};
+pc.ontrack=e=>{remoteVideo.srcObject=e.streams[0];remoteVideoPlaceholder.classList.add("hidden");videoStatus.textContent=t("videoConnected");};
+pc.onconnectionstatechange=()=>{if(pc.connectionState==="failed"||pc.connectionState==="disconnected")videoStatus.textContent=t("videoFailed");};
+if(initiator){pc.createOffer().then(offer=>pc.setLocalDescription(offer)).then(()=>send({type:"offer",offer:pc.localDescription})).catch(err=>{console.error(err);videoStatus.textContent=t("videoFailed");});}
+}
+async function enableCamera(showMessage=true){try{if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw new Error("getUserMedia unavailable");if(!localStream){localStream=await navigator.mediaDevices.getUserMedia({video:true,audio:true});localVideo.srcObject=localStream;videoPlaceholder.classList.add("hidden");}videoStatus.textContent=t("cameraReady");cameraBtn.textContent=language==="en"?"Camera & Microphone Enabled":"دوربین و میکروفون فعال شد";if(matched)await createPeer(true);else if(showMessage)showToast(t("cameraReady"));return true;}catch(err){console.error(err);videoStatus.textContent=t("cameraDenied");showToast(t("cameraDenied"));return false;}}
+function findNext(){if(socket&&socket.readyState===WebSocket.OPEN)send({type:"next"});cleanupPeer();stopLocal();matched=false;partnerId=null;messages.replaceChildren();system(t("searching"));if(socket&&socket.readyState===WebSocket.OPEN){chatSubtitle.textContent=t("searching");send({type:"find",mode:mode});}else connect();}
+function endChat(){if(socket&&socket.readyState===WebSocket.OPEN)send({type:"end"});closeConnection(true);chat.classList.add("hidden");home.classList.remove("hidden");videoArea.classList.add("hidden");$("findText").disabled=$("findVideo").disabled=false;showToast(t("ended"));}
+$("findText").addEventListener("click",()=>openChat("text"));
+$("findVideo").addEventListener("click",()=>openChat("video"));
+$("backHome").addEventListener("click",endChat);
+$("endBtn").addEventListener("click",endChat);
+$("nextBtn").addEventListener("click",findNext);
+$("cameraBtn").addEventListener("click",()=>enableCamera(true));
+$("reportBtn").addEventListener("click",()=>{showToast(t("reportUnavailable"));system(t("report"));});
+messageForm.addEventListener("submit",e=>{e.preventDefault();const text=messageInput.value.trim();if(!text){showToast(t("empty"));return;}if(!matched){showToast(t("sendFirst"));return;}if(send({type:"message",text})){addMessage(text,true);messageInput.value="";messageInput.focus();}});
+window.addEventListener("beforeunload",()=>{try{if(socket)socket.close();}catch(e){}stopLocal();cleanupPeer();});
+if(window.Telegram&&window.Telegram.WebApp){window.Telegram.WebApp.ready();window.Telegram.WebApp.expand();}
+translatePage();console.log("OMEGLE frontend loaded");
+})();
+</script>
+</body>
+</html>
+'''
+path = Path("/mnt/data/index.html")
+path.write_text(html, encoding="utf-8")
+print(f"Created {path} ({path.stat().st_size:,} bytes)")
