@@ -1,1327 +1,1577 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#080809">
-<meta name="description" content="OMEGLE — چت تصادفی متنی و تصویری">
-<title>OMEGLE — Random Chat</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0c">
+  <meta name="description" content="OMEGLE - گفت‌وگوی تصادفی متنی و تصویری">
+  <title>OMEGLE — Random Chat</title>
 
-<style>
-:root {
-  color-scheme: dark;
-  --bg:#080809;
-  --panel:#111114;
-  --panel2:#19191f;
-  --red:#ff294b;
-  --red2:#b90d2b;
-  --text:#f7f7f8;
-  --muted:#9999a5;
-  --line:#292930;
-  --green:#45e0a0;
-}
-* { box-sizing:border-box; }
-html,body {
-  margin:0;
-  min-height:100%;
-  background:var(--bg);
-  color:var(--text);
-  font-family:Inter,system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;
-}
-body {
-  min-height:100vh;
-  background:radial-gradient(ellipse at 50% 0%,#321019 0,transparent 42%),var(--bg);
-}
-button,input { font:inherit; }
-button { cursor:pointer; }
-button:disabled { opacity:.55; cursor:wait; }
-button:focus-visible,input:focus-visible {
-  outline:2px solid var(--red);
-  outline-offset:3px;
-}
-.app {
-  width:min(100%,760px);
-  min-height:100vh;
-  margin:auto;
-  padding:20px 18px 16px;
-  display:flex;
-  flex-direction:column;
-}
-.topbar {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  border-bottom:1px solid #ffffff12;
-  padding:4px 0 18px;
-}
-.brand { font-size:20px; font-weight:900; letter-spacing:1.5px; }
-.brand span { color:var(--red); }
-.topbar-right { display:flex; align-items:center; gap:16px; }
-.online {
-  display:flex;
-  align-items:center;
-  gap:8px;
-  color:#c8c8cf;
-  font-size:11px;
-  letter-spacing:1px;
-}
-.online i {
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:var(--green);
-  box-shadow:0 0 12px #45e0a077;
-}
-.language-switch {
-  display:flex;
-  padding:3px;
-  border:1px solid var(--line);
-  border-radius:10px;
-  background:#111;
-}
-.lang-option {
-  border:0;
-  border-radius:7px;
-  padding:6px 10px;
-  background:transparent;
-  color:var(--muted);
-  font-size:12px;
-}
-.lang-option.active { background:#32101a; color:white; }
-.main { flex:1; display:flex; align-items:center; }
-.home {
-  width:100%;
-  position:relative;
-  text-align:center;
-  padding:44px 0 28px;
-}
-.hero-glow {
-  position:absolute;
-  width:260px;
-  height:260px;
-  left:50%;
-  top:35px;
-  transform:translateX(-50%);
-  background:#d10f3620;
-  filter:blur(70px);
-  pointer-events:none;
-}
-.globe {
-  position:relative;
-  margin:0 auto 22px;
-  width:74px;
-  height:74px;
-  border:1px solid #ff294b70;
-  border-radius:24px;
-  display:grid;
-  place-items:center;
-  color:var(--red);
-  font-size:44px;
-  box-shadow:0 0 50px #ff294b12;
-}
-.eyebrow {
-  position:relative;
-  color:var(--red);
-  font-size:11px;
-  letter-spacing:2px;
-  font-weight:800;
-}
-.home h1 {
-  position:relative;
-  font-size:clamp(36px,8vw,62px);
-  line-height:1.3;
-  letter-spacing:-1px;
-  margin:18px 0;
-}
-.home h1 span { color:var(--red); }
-.description {
-  position:relative;
-  color:#b7b7c0;
-  font-size:15px;
-  line-height:1.9;
-  max-width:420px;
-  margin:0 auto 28px;
-}
-.home-actions {
-  position:relative;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  max-width:470px;
-  margin:0 auto;
-}
-.primary,.secondary,.end-button,.camera-button {
-  min-height:50px;
-  padding:13px 16px;
-  border-radius:14px;
-  font-weight:750;
-  border:1px solid transparent;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:12px;
-}
-.primary {
-  background:linear-gradient(135deg,var(--red),var(--red2));
-  color:white;
-  box-shadow:0 8px 30px #ff294b24;
-}
-.secondary {
-  background:#151519;
-  border-color:#33333b;
-  color:#f3f3f6;
-}
-.primary:hover,.camera-button:hover { filter:brightness(1.08); }
-.secondary:hover { border-color:#6b2a39; }
-.feature-row {
-  display:flex;
-  justify-content:center;
-  gap:26px;
-  margin:30px 0 20px;
-  color:#c9c9d0;
-  font-size:13px;
-}
-.feature { display:flex; align-items:center; gap:8px; }
-.feature-icon { color:var(--red); font-size:20px; }
-.privacy {
-  max-width:490px;
-  margin:0 auto;
-  background:#141114;
-  border:1px solid #ff294b24;
-  color:#c7bbc0;
-  border-radius:12px;
-  padding:12px 14px;
-  font-size:12px;
-  line-height:1.8;
-  display:flex;
-  justify-content:center;
-  gap:8px;
-}
-.privacy span:first-child { color:var(--red); }
-.chat { width:100%; padding:18px 0 12px; }
-.hidden { display:none!important; }
-.chat-heading {
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-bottom:16px;
-}
-.back,.report {
-  border:1px solid var(--line);
-  background:#151519;
-  color:white;
-  border-radius:11px;
-  min-width:42px;
-  height:42px;
-}
-.chat-heading-info { flex:1; min-width:0; }
-.chat-title { font-weight:800; }
-.chat-subtitle { font-size:12px; color:var(--muted); margin-top:4px; }
-.report { padding:0 12px; color:#ff7187; font-size:12px; }
-.video-area { margin-bottom:14px; }
-.video-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.video-card {
-  position:relative;
-  min-height:145px;
-  aspect-ratio:4/3;
-  background:#0d0d10;
-  border:1px solid #292930;
-  border-radius:16px;
-  overflow:hidden;
-}
-.video-card video {
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  position:absolute;
-  inset:0;
-  background:#080809;
-}
-.video-placeholder {
-  position:absolute;
-  inset:0;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:12px;
-  background:linear-gradient(145deg,#17171d,#0c0c0f);
-}
-.video-placeholder p { margin:9px 0 3px; font-size:13px; }
-.video-placeholder small {
-  color:var(--muted);
-  font-size:10px;
-  line-height:1.5;
-}
-.camera-icon { font-size:26px; color:var(--red); }
-.video-label {
-  position:absolute;
-  bottom:8px;
-  right:8px;
-  background:#0009;
-  border:1px solid #ffffff18;
-  border-radius:7px;
-  padding:4px 8px;
-  font-size:10px;
-}
-.video-status {
-  color:var(--muted);
-  font-size:12px;
-  padding:10px 2px;
-  text-align:center;
-}
-.camera-button {
-  width:100%;
-  background:#32101a;
-  border-color:#792034;
-  color:white;
-  min-height:44px;
-}
-.messages {
-  height:min(38vh,340px);
-  min-height:190px;
-  overflow:auto;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  padding:14px;
-  background:#0d0d10;
-  border:1px solid var(--line);
-  border-radius:16px;
-  scroll-behavior:smooth;
-}
-.system-message {
-  text-align:center;
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.7;
-  padding:8px;
-  overflow-wrap:anywhere;
-}
-.message {
-  max-width:84%;
-  padding:10px 13px;
-  border-radius:14px;
-  line-height:1.65;
-  font-size:14px;
-  overflow-wrap:anywhere;
-  white-space:pre-wrap;
-}
-.message.mine {
-  align-self:flex-start;
-  background:#5b1426;
-  border:1px solid #a92743;
-}
-.message.theirs {
-  align-self:flex-end;
-  background:#1b1b21;
-  border:1px solid #303038;
-}
-.message-form { display:flex; gap:9px; margin:10px 0; }
-.message-form input {
-  min-width:0;
-  flex:1;
-  background:#151519;
-  border:1px solid #303038;
-  border-radius:13px;
-  padding:13px 14px;
-  color:white;
-}
-.message-form input::placeholder { color:#7f7f8a; }
-.message-form button {
-  width:48px;
-  border:0;
-  border-radius:13px;
-  background:var(--red);
-  color:white;
-  font-size:20px;
-}
-.chat-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.chat-actions button { min-height:44px; font-size:13px; }
-.end-button { background:#171114; border-color:#54202d; color:#ff8a9b; }
-footer {
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:8px;
-  color:#74747f;
-  font-size:11px;
-  padding:18px 0 2px;
-}
-footer span:first-child { font-weight:900; letter-spacing:1px; color:#b9b9c2; }
-.footer-dot { color:var(--red); }
-.toast {
-  position:fixed;
-  z-index:10;
-  bottom:22px;
-  left:50%;
-  transform:translateX(-50%);
-  max-width:calc(100vw - 32px);
-  padding:12px 16px;
-  border-radius:12px;
-  background:#242429;
-  border:1px solid #45454e;
-  color:white;
-  font-size:13px;
-  box-shadow:0 12px 40px #0008;
-  text-align:center;
-}
-.app[dir="ltr"] .video-label { right:auto; left:8px; }
-.app[dir="ltr"] .message.mine { align-self:flex-end; }
-.app[dir="ltr"] .message.theirs { align-self:flex-start; }
-.app[dir="ltr"] .privacy { direction:ltr; }
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-@media(max-width:480px) {
-  .app { padding:14px 13px 10px; }
-  .topbar { padding-bottom:14px; }
-  .online { font-size:9px; letter-spacing:.5px; }
-  .topbar-right { gap:10px; }
-  .home { padding:32px 0 20px; }
-  .home-actions { grid-template-columns:1fr; }
-  .primary,.secondary { min-height:49px; }
-  .feature-row { gap:15px; font-size:12px; }
-  .video-card { min-height:120px; }
-  .messages { height:34vh; min-height:170px; }
-  .chat { padding-top:12px; }
-}
-@media(prefers-reduced-motion:no-preference) {
-  .globe { animation:pulse 4s ease-in-out infinite; }
-  @keyframes pulse { 50% { box-shadow:0 0 50px #ff294b24; } }
-}
-</style>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #09090b;
+      --panel: #111115;
+      --panel2: #17171d;
+      --red: #e32636;
+      --red2: #a90f20;
+      --text: #f5f5f7;
+      --muted: #9999a5;
+      --border: #292931;
+      --green: #36c98f;
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      background:
+        radial-gradient(ellipse at top, #211015 0%, transparent 46%),
+        var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Arial, sans-serif;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--red);
+      outline-offset: 3px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: 16px;
+      padding-top: max(16px, env(safe-area-inset-top));
+      padding-bottom: max(18px, env(safe-area-inset-bottom));
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 26px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 43px;
+      height: 43px;
+      flex: 0 0 43px;
+      border-radius: 14px;
+      background: linear-gradient(145deg, #fa3547, #8c0718);
+      box-shadow: 0 5px 24px #e3263630;
+      font-weight: 900;
+      font-size: 21px;
+    }
+
+    .brand-name {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+    }
+
+    .brand-subtitle {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .language-button {
+      flex: 0 0 auto;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      padding: 9px 13px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .screen {
+      display: none;
+      animation: appear .2s ease;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero {
+      text-align: center;
+      padding: 25px 8px 23px;
+    }
+
+    .hero-symbol {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 20px;
+      border-radius: 29px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, #311018, #140b0e);
+      border: 1px solid #69212b;
+      color: #ff3b4e;
+      font-size: 43px;
+      font-weight: 900;
+      box-shadow: 0 12px 50px #e3263618;
+    }
+
+    .hero h2 {
+      font-size: clamp(27px, 7vw, 37px);
+      margin: 0 0 12px;
+      font-weight: 900;
+      letter-spacing: .5px;
+    }
+
+    .hero h2 span {
+      color: var(--red);
+    }
+
+    .hero p {
+      max-width: 440px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.9;
+    }
+
+    .panel {
+      background: linear-gradient(145deg, #151519, #101013);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 19px;
+      margin-bottom: 15px;
+    }
+
+    .panel-title {
+      margin: 0 0 14px;
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .mode-card {
+      text-align: start;
+      padding: 17px 14px;
+      min-width: 0;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color .2s, transform .2s;
+    }
+
+    .mode-card:active {
+      transform: scale(.98);
+    }
+
+    .mode-icon {
+      display: grid;
+      place-items: center;
+      width: 43px;
+      height: 43px;
+      margin-bottom: 13px;
+      border-radius: 13px;
+      background: #e3263618;
+      color: #ff4b5d;
+      font-size: 22px;
+    }
+
+    .mode-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .mode-card small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .mode-card.video {
+      border-color: #60202a;
+    }
+
+    .primary-button,
+    .secondary-button,
+    .danger-button {
+      width: 100%;
+      min-height: 47px;
+      border: 0;
+      border-radius: 13px;
+      padding: 12px 16px;
+      cursor: pointer;
+      font-weight: 800;
+      transition: opacity .2s, transform .2s;
+    }
+
+    .primary-button {
+      color: white;
+      background: linear-gradient(100deg, #ed3042, #b50d22);
+      box-shadow: 0 5px 20px #e3263620;
+    }
+
+    .secondary-button {
+      color: var(--text);
+      background: var(--panel2);
+      border: 1px solid var(--border);
+    }
+
+    .danger-button {
+      color: #ff6b78;
+      background: #e3263615;
+      border: 1px solid #5d2029;
+    }
+
+    button:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+
+    .primary-button:active,
+    .secondary-button:active,
+    .danger-button:active {
+      transform: scale(.99);
+    }
+
+    .notice {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.9;
+      text-align: center;
+      margin: 15px 5px 0;
+    }
+
+    .status-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 14px;
+      background: #17171c;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 15px;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .status-dot {
+      flex: 0 0 9px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #888;
+    }
+
+    .status-dot.online {
+      background: var(--green);
+      box-shadow: 0 0 12px #36c98f70;
+    }
+
+    .status-dot.searching {
+      background: #ffbd4a;
+      animation: pulse 1s infinite alternate;
+    }
+
+    .status-dot.error {
+      background: var(--red);
+    }
+
+    @keyframes pulse {
+      to { opacity: .35; }
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 5px 0 15px;
+    }
+
+    .chat-heading {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 900;
+    }
+
+    .chat-subheading {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .tag {
+      padding: 7px 10px;
+      background: #e3263618;
+      color: #ff6876;
+      border: 1px solid #63202b;
+      border-radius: 999px;
+      white-space: nowrap;
+      font-size: 11px;
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 13px;
+    }
+
+    .video-card {
+      min-width: 0;
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4 / 5;
+      background: #050506;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+    }
+
+    .video-card video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      background: #050506;
+    }
+
+    .video-label {
+      position: absolute;
+      z-index: 2;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      padding: 7px 9px;
+      border-radius: 9px;
+      background: #000000a8;
+      font-size: 11px;
+      text-align: center;
+    }
+
+    .video-placeholder {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-content: center;
+      text-align: center;
+      padding: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .video-placeholder span {
+      display: block;
+      font-size: 30px;
+      margin-bottom: 9px;
+    }
+
+    .video-controls {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+      margin-bottom: 14px;
+    }
+
+    .video-controls button {
+      min-width: 0;
+      font-size: 12px;
+    }
+
+    .messages {
+      height: min(38vh, 330px);
+      min-height: 190px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 13px;
+      background: #0b0b0e;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      margin-bottom: 11px;
+      overscroll-behavior: contain;
+    }
+
+    .message {
+      max-width: 86%;
+      padding: 10px 12px;
+      border-radius: 13px;
+      font-size: 13px;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .message.system {
+      max-width: 100%;
+      align-self: center;
+      color: var(--muted);
+      background: #17171c;
+      text-align: center;
+      font-size: 11px;
+    }
+
+    .message.mine {
+      align-self: flex-start;
+      background: #791b28;
+      border: 1px solid #a12a39;
+    }
+
+    .message.theirs {
+      align-self: flex-end;
+      background: #202027;
+      border: 1px solid #34343d;
+    }
+
+    .message-form {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 51px;
+      gap: 9px;
+      margin-bottom: 14px;
+    }
+
+    .message-input {
+      width: 100%;
+      min-width: 0;
+      padding: 13px;
+      color: var(--text);
+      background: #151519;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      outline: none;
+    }
+
+    .send-button {
+      border: 0;
+      border-radius: 13px;
+      background: var(--red);
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .footer {
+      padding: 24px 8px 5px;
+      text-align: center;
+      color: #73737e;
+      font-size: 11px;
+      line-height: 1.9;
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 99;
+      left: 16px;
+      right: 16px;
+      bottom: max(18px, env(safe-area-inset-bottom));
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 13px 15px;
+      background: #24242a;
+      color: white;
+      border: 1px solid #45454f;
+      border-radius: 13px;
+      box-shadow: 0 8px 30px #0008;
+      font-size: 13px;
+      line-height: 1.7;
+      display: none;
+    }
+
+    .toast.show {
+      display: block;
+    }
+
+    [dir="ltr"] .message.mine {
+      align-self: flex-end;
+    }
+
+    [dir="ltr"] .message.theirs {
+      align-self: flex-start;
+    }
+
+    @media (max-width: 380px) {
+      .app {
+        padding-left: 11px;
+        padding-right: 11px;
+      }
+
+      .panel {
+        padding: 14px;
+      }
+
+      .mode-card {
+        padding: 13px 11px;
+      }
+
+      .video-grid {
+        gap: 7px;
+      }
+    }
+  </style>
 </head>
 
 <body>
-<div class="app" id="app" lang="fa" dir="rtl">
-
-<header class="topbar">
-  <div class="brand">OMEGLE<span>.</span></div>
-  <div class="topbar-right">
-    <div class="online">
-      <i></i>
-      <span data-fa="چت تصادفی" data-en="RANDOM CHAT">چت تصادفی</span>
-    </div>
-    <div class="language-switch" aria-label="انتخاب زبان">
-      <button type="button" id="langFa" class="lang-option active" aria-pressed="true">فا</button>
-      <button type="button" id="langEn" class="lang-option" aria-pressed="false">EN</button>
-    </div>
-  </div>
-</header>
-
-<main class="main">
-
-<section class="home" id="home">
-  <div class="hero-glow" aria-hidden="true"></div>
-  <div class="globe" aria-hidden="true">◎</div>
-
-  <p class="eyebrow"
-     data-fa="دنیای تو. ارتباط تو."
-     data-en="YOUR WORLD. YOUR CONNECTION.">دنیای تو. ارتباط تو.</p>
-
-  <h1 data-fa="با دنیای جدید<br><span>آشنا شو.</span>"
-      data-en="MEET SOMEONE<br><span>NEW.</span>">
-    با دنیای جدید<br><span>آشنا شو.</span>
-  </h1>
-
-  <p class="description"
-     data-fa="با افراد جدید آشنا شو و گفت‌وگوهای تازه‌ای را شروع کن."
-     data-en="Meet new people and start a conversation.">
-    با افراد جدید آشنا شو و گفت‌وگوهای تازه‌ای را شروع کن.
-  </p>
-
-  <div class="home-actions">
-    <button class="primary" id="findText" type="button">
-      <span data-fa="شروع چت متنی" data-en="Start Text Chat">شروع چت متنی</span>
-      <span aria-hidden="true">↗</span>
-    </button>
-    <button class="secondary" id="findVideo" type="button">
-      <span data-fa="شروع چت تصویری" data-en="Start Video Chat">شروع چت تصویری</span>
-      <span aria-hidden="true">◉</span>
-    </button>
-  </div>
-
-  <div class="feature-row">
-    <div class="feature">
-      <span class="feature-icon">◎</span>
-      <span data-fa="گفت‌وگوی تصادفی" data-en="Random chat">گفت‌وگوی تصادفی</span>
-    </div>
-    <div class="feature">
-      <span class="feature-icon">◇</span>
-      <span data-fa="حفظ حریم خصوصی" data-en="Privacy first">حفظ حریم خصوصی</span>
-    </div>
-  </div>
-
-  <div class="privacy">
-    <span aria-hidden="true">♢</span>
-    <span data-fa="اطلاعات شخصی و رمزهای خود را به افراد ناشناس نده."
-          data-en="Never share personal information or passwords.">
-      اطلاعات شخصی و رمزهای خود را به افراد ناشناس نده.
-    </span>
-  </div>
-</section>
-
-<section class="chat hidden" id="chat">
-  <div class="chat-heading">
-    <button class="back" id="backHome" type="button" aria-label="بازگشت">←</button>
-    <div class="chat-heading-info">
-      <div class="chat-title" id="chatTitle">چت تصادفی</div>
-      <div class="chat-subtitle" id="chatSubtitle">در حال اتصال...</div>
-    </div>
-    <button class="report" id="reportBtn" type="button"
-            data-fa="گزارش" data-en="Report">گزارش</button>
-  </div>
-
-  <div class="video-area hidden" id="videoArea">
-    <div class="video-grid">
-      <div class="video-card">
-        <video id="remoteVideo" autoplay playsinline
-               aria-label="تصویر طرف مقابل"></video>
-        <div class="video-placeholder" id="remoteVideoPlaceholder">
-          <div class="camera-icon">◉</div>
-          <p data-fa="تصویر طرف مقابل" data-en="Stranger's video">تصویر طرف مقابل</p>
-          <small data-fa="منتظر برقراری تماس..." data-en="Waiting for video connection...">
-            منتظر برقراری تماس...
-          </small>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">O</div>
+        <div>
+          <h1 class="brand-name">OMEGLE</h1>
+          <div class="brand-subtitle"
+               data-fa="گفت‌وگوی تصادفی آنلاین"
+               data-en="Random online chat">
+            گفت‌وگوی تصادفی آنلاین
+          </div>
         </div>
-        <div class="video-label" data-fa="طرف مقابل" data-en="Stranger">طرف مقابل</div>
       </div>
 
-      <div class="video-card">
-        <video id="localVideo" autoplay muted playsinline
-               aria-label="تصویر خودم"></video>
-        <div class="video-placeholder" id="videoPlaceholder">
-          <div class="camera-icon">◉</div>
-          <p data-fa="دوربین شما" data-en="Your camera">دوربین شما</p>
-          <small data-fa="برای شروع، دوربین را فعال کن."
-                 data-en="Enable your camera to begin.">
-            برای شروع، دوربین را فعال کن.
-          </small>
-        </div>
-        <div class="video-label" data-fa="شما" data-en="You">شما</div>
+      <button class="language-button" id="languageButton"
+              type="button">EN</button>
+    </header>
+
+    <section class="screen active" id="homeScreen">
+      <div class="hero">
+        <div class="hero-symbol">O</div>
+        <h2>OME<span>GLE</span></h2>
+        <p data-fa="با افراد جدید آشنا شو؛ گفت‌وگو را شروع کن و تجربه‌ای تازه داشته باش."
+           data-en="Meet new people, start a conversation, and discover someone new.">
+          با افراد جدید آشنا شو؛ گفت‌وگو را شروع کن و تجربه‌ای تازه داشته باش.
+        </p>
       </div>
-    </div>
 
-    <div class="video-status" id="videoStatus" role="status">
-      تماس تصویری هنوز برقرار نشده است.
-    </div>
-
-    <button class="camera-button" id="cameraBtn" type="button"
-            data-fa="فعال‌کردن دوربین و میکروفون"
-            data-en="Enable Camera & Microphone">
-      فعال‌کردن دوربین و میکروفون
-    </button>
-  </div>
-
-  <div class="messages" id="messages" aria-live="polite">
-    <div class="system-message">برای گفت‌وگو، ابتدا به یک کاربر متصل شو.</div>
-  </div>
-
-  <form class="message-form" id="messageForm" autocomplete="off">
-    <input id="messageInput" name="message" type="text" maxlength="1000"
-           placeholder="پیامت را بنویس..." autocomplete="off" aria-label="پیام">
-    <button id="sendMessageBtn" type="submit" aria-label="ارسال پیام">➤</button>
-  </form>
-
-  <div class="chat-actions">
-    <button class="secondary" id="nextBtn" type="button">
-      <span data-fa="نفر بعدی" data-en="Next person">نفر بعدی</span>
-      <span aria-hidden="true">↻</span>
-    </button>
-    <button class="end-button" id="endBtn" type="button"
-            data-fa="پایان گفتگو" data-en="End Chat">پایان گفتگو</button>
-  </div>
-</section>
-
-</main>
-
-<footer>
-  <span>OMEGLE</span>
-  <span class="footer-dot">•</span>
-  <span data-fa="با احترام ارتباط برقرار کن"
-        data-en="CONNECT WITH RESPECT">با احترام ارتباط برقرار کن</span>
-</footer>
-
-<div class="toast hidden" id="toast" role="status"></div>
-</div>
-
-<script>
-(function () {
-"use strict";
-
-const $ = id => document.getElementById(id);
-const SERVER_URL = "wss://omegle-chat-server.onrender.com";
-
-const app = $("app");
-const home = $("home");
-const chat = $("chat");
-const chatTitle = $("chatTitle");
-const chatSubtitle = $("chatSubtitle");
-const messages = $("messages");
-const messageForm = $("messageForm");
-const messageInput = $("messageInput");
-const videoArea = $("videoArea");
-const localVideo = $("localVideo");
-const remoteVideo = $("remoteVideo");
-const videoPlaceholder = $("videoPlaceholder");
-const remoteVideoPlaceholder = $("remoteVideoPlaceholder");
-const videoStatus = $("videoStatus");
-const cameraBtn = $("cameraBtn");
-const toast = $("toast");
-
-const copy = {
-  fa: {
-    connecting:"در حال اتصال به سرور...",
-    searching:"در حال جست‌وجوی کاربر...",
-    waiting:"هنوز کاربری پیدا نشده؛ منتظر بمان...",
-    matched:"کاربر پیدا شد؛ می‌توانی گفت‌وگو کنی.",
-    disconnected:"ارتباط با سرور قطع شد. دوباره تلاش کن.",
-    sendFirst:"ابتدا به یک کاربر متصل شو.",
-    cameraReady:"دوربین فعال شد؛ در انتظار اتصال تصویر...",
-    cameraDenied:"دسترسی دوربین یا میکروفون داده نشد.",
-    videoConnected:"تماس تصویری برقرار شد.",
-    videoFailed:"اتصال تصویری برقرار نشد؛ وضعیت شبکه را بررسی کن.",
-    partnerLeft:"کاربر دیگر خارج شد.",
-    ended:"گفت‌وگو پایان یافت.",
-    reportUnavailable:"گزارش‌دهی هنوز به سرور وصل نشده است.",
-    report:"برای ایمنی اطلاعات شخصی خود را نفرست.",
-    empty:"پیام خالی ارسال نمی‌شود.",
-    serverError:"خطا در اتصال به سرور.",
-    textChat:"چت متنی",
-    videoChat:"چت تصویری",
-    searchTitle:"در جست‌وجوی کاربر...",
-    cameraButton:"فعال‌کردن دوربین و میکروفون",
-    placeholder:"پیامت را بنویس..."
-  },
-  en: {
-    connecting:"Connecting to server...",
-    searching:"Searching for a user...",
-    waiting:"No user found yet; keep waiting...",
-    matched:"User found. You can start chatting.",
-    disconnected:"Server connection lost. Try again.",
-    sendFirst:"Connect with a user first.",
-    cameraReady:"Camera enabled; waiting for video connection...",
-    cameraDenied:"Camera or microphone access was denied.",
-    videoConnected:"Video call connected.",
-    videoFailed:"Video connection failed. Check your network.",
-    partnerLeft:"The other user left.",
-    ended:"Chat ended.",
-    reportUnavailable:"Reporting is not connected to the server yet.",
-    report:"For your safety, do not share personal information.",
-    empty:"Empty messages cannot be sent.",
-    serverError:"Server connection error.",
-    textChat:"Text Chat",
-    videoChat:"Video Chat",
-    searchTitle:"Searching for a user...",
-    cameraButton:"Enable Camera & Microphone",
-    placeholder:"Type your message..."
-  }
-};
-
-let language = "fa";
-let socket = null;
-let mode = "text";
-let matched = false;
-let searching = false;
-let isInitiator = false;
-let localStream = null;
-let peer = null;
-let toastTimer = null;
-let sessionId = 0;
-let pendingIce = [];
-let cameraRequestId = 0;
-
-function t(key) {
-  return (copy[language] && copy[language][key]) || copy.fa[key] || key;
-}
-
-function showToast(text) {
-  toast.textContent = text;
-  toast.classList.remove("hidden");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.add("hidden"), 3200);
-}
-
-function systemMessage(text) {
-  const el = document.createElement("div");
-  el.className = "system-message";
-  el.textContent = text;
-  messages.appendChild(el);
-  messages.scrollTop = messages.scrollHeight;
-}
-
-function addMessage(text, mine) {
-  const el = document.createElement("div");
-  el.className = "message " + (mine ? "mine" : "theirs");
-  el.textContent = text;
-  messages.appendChild(el);
-  messages.scrollTop = messages.scrollHeight;
-}
-
-function clearMessages(text) {
-  messages.replaceChildren();
-  systemMessage(text);
-}
-
-function translatePage() {
-  app.querySelectorAll("[data-fa][data-en]").forEach(el => {
-    if (el.matches(".home h1")) return;
-
-    el.textContent = language === "en"
-      ? el.getAttribute("data-en")
-      : el.getAttribute("data-fa");
-  });
-
-  const headline = app.querySelector(".home h1");
-  if (headline) {
-    headline.innerHTML = language === "en"
-      ? "MEET SOMEONE<br><span>NEW.</span>"
-      : "با دنیای جدید<br><span>آشنا شو.</span>";
-  }
-
-  $("langFa").classList.toggle("active", language === "fa");
-  $("langEn").classList.toggle("active", language === "en");
-  $("langFa").setAttribute("aria-pressed", String(language === "fa"));
-  $("langEn").setAttribute("aria-pressed", String(language === "en"));
-
-  app.lang = language;
-  app.dir = language === "en" ? "ltr" : "rtl";
-  document.documentElement.lang = language;
-  document.documentElement.dir = app.dir;
-
-  messageInput.placeholder = t("placeholder");
-  chatTitle.textContent = mode === "video" ? t("videoChat") : t("textChat");
-  cameraBtn.textContent = t("cameraButton");
-}
-
-$("langFa").addEventListener("click", () => {
-  language = "fa";
-  translatePage();
-});
-
-$("langEn").addEventListener("click", () => {
-  language = "en";
-  translatePage();
-});
-
-function send(data) {
-  if (!socket || socket.readyState !== WebSocket.OPEN) {
-    showToast(t("disconnected"));
-    return false;
-  }
-
-  try {
-    socket.send(JSON.stringify(data));
-    return true;
-  } catch (err) {
-    console.error("WebSocket send failed:", err);
-    showToast(t("serverError"));
-    return false;
-  }
-}
-
-function cleanupPeer(clearCandidates = true) {
-  const oldPeer = peer;
-  peer = null;
-
-  if (oldPeer) {
-    oldPeer.onicecandidate = null;
-    oldPeer.ontrack = null;
-    oldPeer.onconnectionstatechange = null;
-    oldPeer.oniceconnectionstatechange = null;
-
-    try {
-      oldPeer.close();
-    } catch (err) {
-      console.warn("Peer cleanup failed:", err);
-    }
-  }
-
-  if (clearCandidates) pendingIce = [];
-
-  remoteVideo.srcObject = null;
-  remoteVideoPlaceholder.classList.remove("hidden");
-}
-
-function stopLocal() {
-  cameraRequestId++;
-
-  if (localStream) {
-    localStream.getTracks().forEach(track => track.stop());
-  }
-
-  localStream = null;
-  localVideo.srcObject = null;
-  videoPlaceholder.classList.remove("hidden");
-}
-
-function closeConnection() {
-  sessionId++;
-  matched = false;
-  searching = false;
-  isInitiator = false;
-
-  cleanupPeer(true);
-  stopLocal();
-
-  const oldSocket = socket;
-  socket = null;
-
-  if (oldSocket) {
-    try {
-      oldSocket.close();
-    } catch (err) {
-      console.warn("Socket close failed:", err);
-    }
-  }
-}
-
-function openChat(nextMode) {
-  closeConnection();
-
-  mode = nextMode;
-  home.classList.add("hidden");
-  chat.classList.remove("hidden");
-  videoArea.classList.toggle("hidden", mode !== "video");
-
-  chatTitle.textContent = mode === "video" ? t("videoChat") : t("textChat");
-  chatSubtitle.textContent = t("connecting");
-  videoStatus.textContent = t("cameraReady");
-
-  clearMessages(t("connecting"));
-
-  $("findText").disabled = true;
-  $("findVideo").disabled = true;
-
-  connect();
-}
-
-function connect() {
-  const thisSession = sessionId;
-  searching = true;
-
-  chatSubtitle.textContent = t("connecting");
-
-  let ws;
-
-  try {
-    ws = new WebSocket(SERVER_URL);
-  } catch (err) {
-    searching = false;
-    chatSubtitle.textContent = t("serverError");
-    systemMessage(t("serverError"));
-    $("findText").disabled = false;
-    $("findVideo").disabled = false;
-    return;
-  }
-
-  socket = ws;
-
-  ws.addEventListener("open", () => {
-    if (socket !== ws || thisSession !== sessionId) return;
-
-    chatSubtitle.textContent = t("searching");
-    systemMessage(t("searching"));
-    send({ type: "find", mode });
-  });
-
-  ws.addEventListener("message", async event => {
-    if (socket !== ws || thisSession !== sessionId) return;
-
-    let data;
-
-    try {
-      data = JSON.parse(event.data);
-    } catch (err) {
-      console.warn("Server sent invalid JSON");
-      return;
-    }
-
-    try {
-      await handleServerMessage(data, thisSession);
-    } catch (err) {
-      console.error("Server message handling failed:", err);
-      videoStatus.textContent = t("videoFailed");
-    }
-  });
-
-  ws.addEventListener("error", () => {
-    if (socket !== ws || thisSession !== sessionId) return;
-
-    chatSubtitle.textContent = t("serverError");
-    showToast(t("serverError"));
-  });
-
-  ws.addEventListener("close", () => {
-    if (socket !== ws || thisSession !== sessionId) return;
-
-    socket = null;
-    matched = false;
-    searching = false;
-    isInitiator = false;
-
-    cleanupPeer(true);
-
-    chatSubtitle.textContent = t("disconnected");
-    systemMessage(t("disconnected"));
-
-    $("findText").disabled = false;
-    $("findVideo").disabled = false;
-  });
-}
-
-async function flushPendingIce(pc) {
-  if (!pc || !pc.remoteDescription) return;
-
-  const candidates = pendingIce.splice(0);
-
-  for (const candidate of candidates) {
-    if (peer !== pc) return;
-
-    try {
-      await pc.addIceCandidate(candidate);
-    } catch (err) {
-      console.warn("Could not add queued ICE candidate:", err);
-    }
-  }
-}
-
-async function handleServerMessage(data, thisSession) {
-  if (thisSession !== sessionId) return;
-
-  const type = data.type || data.event;
-
-  if (type === "connected") {
-    return;
-  }
-
-  if (type === "matched" || type === "match" || type === "user_found") {
-    matched = true;
-    searching = false;
-    isInitiator = data.initiator === true;
-
-    chatSubtitle.textContent = t("matched");
-    systemMessage(t("matched"));
-
-    if (mode === "video" && localStream) {
-      await createPeer(isInitiator);
-    }
-
-    return;
-  }
-
-  if (type === "waiting" || type === "searching") {
-    searching = true;
-    chatSubtitle.textContent = t("searchTitle");
-    return;
-  }
-
-  if (type === "message") {
-    const text = String(data.text ?? data.message ?? "").slice(0, 1000);
-    if (text) addMessage(text, false);
-    return;
-  }
-
-  if (
-    type === "partner_left" ||
-    type === "user_left" ||
-    type === "disconnected"
-  ) {
-    matched = false;
-    isInitiator = false;
-
-    cleanupPeer(true);
-
-    chatSubtitle.textContent = t("partnerLeft");
-    videoStatus.textContent = t("partnerLeft");
-    systemMessage(t("partnerLeft"));
-    return;
-  }
-
-  if (type === "offer") {
-    if (mode !== "video" || !matched) return;
-
-    if (!localStream) {
-      const ok = await enableCamera(false);
-      if (!ok || !matched || thisSession !== sessionId) return;
-    }
-
-    let pc = peer;
-
-    if (!pc) {
-      pc = await createPeer(false);
-    }
-
-    if (!pc || peer !== pc) return;
-
-    const offerDescription = data.offer || data.description || data;
-
-    if (!offerDescription || typeof offerDescription.sdp !== "string") {
-      console.warn("Offer did not contain SDP");
-      return;
-    }
-
-    try {
-      await pc.setRemoteDescription(
-        new RTCSessionDescription(offerDescription)
-      );
-
-      if (peer !== pc) return;
-
-      await flushPendingIce(pc);
-
-      const answer = await pc.createAnswer();
-
-      if (peer !== pc) return;
-
-      await pc.setLocalDescription(answer);
-
-      if (peer !== pc) return;
-
-      send({
-        type: "answer",
-        answer: pc.localDescription
-      });
-
-      videoStatus.textContent = t("cameraReady");
-    } catch (err) {
-      console.error("Offer/answer negotiation failed:", err);
-      videoStatus.textContent = t("videoFailed");
-    }
-
-    return;
-  }
-
-  if (type === "answer") {
-    const pc = peer;
-
-    if (!pc) {
-      console.warn("Answer received before peer was created");
-      return;
-    }
-
-    const answerDescription = data.answer || data.description || data;
-
-    if (!answerDescription || typeof answerDescription.sdp !== "string") {
-      console.warn("Answer did not contain SDP");
-      return;
-    }
-
-    try {
-      await pc.setRemoteDescription(
-        new RTCSessionDescription(answerDescription)
-      );
-
-      if (peer !== pc) return;
-
-      await flushPendingIce(pc);
-    } catch (err) {
-      console.error("Setting remote answer failed:", err);
-      videoStatus.textContent = t("videoFailed");
-    }
-
-    return;
-  }
-
-  if (type === "ice-candidate" || type === "candidate") {
-    const candidateData = data.candidate;
-    if (!candidateData) return;
-
-    try {
-      const candidate = new RTCIceCandidate(candidateData);
-      const pc = peer;
-
-      if (pc && pc.remoteDescription) {
-        await pc.addIceCandidate(candidate);
-      } else {
-        pendingIce.push(candidate);
-      }
-    } catch (err) {
-      console.warn("ICE candidate handling failed:", err);
-    }
-
-    return;
-  }
-
-  if (type === "next" || type === "end" || type === "ended") {
-    matched = false;
-    isInitiator = false;
-    cleanupPeer(true);
-    systemMessage(t("partnerLeft"));
-    return;
-  }
-
-  if (type === "error") {
-    console.warn("Server error:", data.message);
-    showToast(String(data.message || t("serverError")));
-  }
-}
-
-async function createPeer(initiator) {
-  if (peer) return peer;
-
-  if (!matched || mode !== "video") return null;
-
-  const pc = new RTCPeerConnection({
-    iceServers: [
-      { urls: "stun:stun.l.google.com:19302" },
-      { urls: "stun:stun1.l.google.com:19302" }
-    ]
-  });
-
-  peer = pc;
-
-  if (localStream) {
-    localStream.getTracks().forEach(track => {
-      pc.addTrack(track, localStream);
-    });
-  }
-
-  pc.onicecandidate = event => {
-    if (peer !== pc || !event.candidate) return;
-
-    send({
-      type: "ice-candidate",
-      candidate: event.candidate
-    });
-  };
-
-  pc.ontrack = event => {
-    if (peer !== pc) return;
-
-    if (event.streams && event.streams[0]) {
-      remoteVideo.srcObject = event.streams[0];
-    } else {
-      let stream = remoteVideo.srcObject;
-
-      if (!(stream instanceof MediaStream)) {
-        stream = new MediaStream();
-        remoteVideo.srcObject = stream;
+      <div class="panel">
+        <h3 class="panel-title"
+            data-fa="نوع گفت‌وگو را انتخاب کن"
+            data-en="Choose your chat mode">
+          نوع گفت‌وگو را انتخاب کن
+        </h3>
+
+        <div class="mode-grid">
+          <button class="mode-card" id="textModeButton" type="button">
+            <span class="mode-icon">✉</span>
+            <strong data-fa="چت متنی" data-en="Text chat">چت متنی</strong>
+            <small data-fa="گفت‌وگو با پیام‌های متنی"
+                   data-en="Chat using text messages">
+              گفت‌وگو با پیام‌های متنی
+            </small>
+          </button>
+
+          <button class="mode-card video" id="videoModeButton" type="button">
+            <span class="mode-icon">▣</span>
+            <strong data-fa="چت تصویری" data-en="Video chat">چت تصویری</strong>
+            <small data-fa="ابتدا فرد مقابل را پیدا کن، سپس دوربین را فعال کن"
+                   data-en="Find someone first, then enable your camera">
+              ابتدا فرد مقابل را پیدا کن، سپس دوربین را فعال کن
+            </small>
+          </button>
+        </div>
+
+        <p class="notice"
+           data-fa="با شروع، ممکن است با یک کاربر ناشناس ارتباط برقرار کنی. اطلاعات شخصی خود را به افراد ناشناس نده."
+           data-en="You may connect with a stranger. Do not share personal information with unknown users.">
+          با شروع، ممکن است با یک کاربر ناشناس ارتباط برقرار کنی. اطلاعات شخصی خود را به افراد ناشناس نده.
+        </p>
+      </div>
+    </section>
+
+    <section class="screen" id="chatScreen">
+      <div class="chat-header">
+        <div>
+          <h2 class="chat-heading" id="chatHeading">OMEGLE Chat</h2>
+          <div class="chat-subheading" id="chatSubheading">
+            گفت‌وگوی تصادفی
+          </div>
+        </div>
+        <span class="tag" id="modeTag">TEXT</span>
+      </div>
+
+      <div class="status-box" role="status" aria-live="polite">
+        <span class="status-dot searching" id="statusDot"></span>
+        <span id="statusText">در حال اتصال به سرور...</span>
+      </div>
+
+      <div id="videoSection" hidden>
+        <div class="video-grid">
+          <div class="video-card">
+            <video id="localVideo" autoplay playsinline muted></video>
+            <div class="video-placeholder" id="localPlaceholder">
+              <div>
+                <span>▣</span>
+                <div data-fa="دوربین شما" data-en="Your camera">دوربین شما</div>
+              </div>
+            </div>
+            <div class="video-label"
+                 data-fa="شما" data-en="You">شما</div>
+          </div>
+
+          <div class="video-card">
+            <video id="remoteVideo" autoplay playsinline></video>
+            <div class="video-placeholder" id="remotePlaceholder">
+              <div>
+                <span>◉</span>
+                <div data-fa="تصویر طرف مقابل" data-en="Partner's video">
+                  تصویر طرف مقابل
+                </div>
+              </div>
+            </div>
+            <div class="video-label"
+                 data-fa="طرف مقابل" data-en="Stranger">طرف مقابل</div>
+          </div>
+        </div>
+
+        <div class="video-controls">
+          <button class="secondary-button" id="cameraButton" type="button">
+            <span data-fa="فعال‌کردن دوربین" data-en="Enable camera">
+              فعال‌کردن دوربین
+            </span>
+          </button>
+          <button class="secondary-button" id="micButton" type="button">
+            <span data-fa="فعال‌کردن میکروفون" data-en="Enable microphone">
+              فعال‌کردن میکروفون
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <div class="messages" id="messages" aria-live="polite">
+        <div class="message system"
+             data-fa="پیام‌های گفت‌وگو اینجا نمایش داده می‌شوند."
+             data-en="Chat messages will appear here.">
+          پیام‌های گفت‌وگو اینجا نمایش داده می‌شوند.
+        </div>
+      </div>
+
+      <form class="message-form" id="messageForm">
+        <input class="message-input" id="messageInput"
+               maxlength="1000" autocomplete="off"
+               placeholder="پیام خود را بنویس..."
+               aria-label="پیام">
+        <button class="send-button" type="submit"
+                aria-label="ارسال پیام">➤</button>
+      </form>
+
+      <div class="action-grid">
+        <button class="primary-button" id="nextButton" type="button">
+          <span data-fa="نفر بعدی ←" data-en="Next stranger →">
+            نفر بعدی ←
+          </span>
+        </button>
+        <button class="danger-button" id="endButton" type="button">
+          <span data-fa="پایان گفت‌وگو" data-en="End chat">
+            پایان گفت‌وگو
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div data-fa="OMEGLE · گفت‌وگوی تصادفی"
+           data-en="OMEGLE · Random chat">
+        OMEGLE · گفت‌وگوی تصادفی
+      </div>
+      <div data-fa="با احترام رفتار کن و از به‌اشتراک‌گذاری اطلاعات خصوصی خودداری کن."
+           data-en="Be respectful and avoid sharing private information.">
+        با احترام رفتار کن و از به‌اشتراک‌گذاری اطلاعات خصوصی خودداری کن.
+      </div>
+    </footer>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const SERVER_URL = "wss://omegle-chat-server.onrender.com";
+
+      const $ = (id) => document.getElementById(id);
+
+      const tg = window.Telegram?.WebApp;
+      try {
+        tg?.ready();
+        tg?.expand();
+      } catch (_) {}
+
+      const homeScreen = $("homeScreen");
+      const chatScreen = $("chatScreen");
+      const textModeButton = $("textModeButton");
+      const videoModeButton = $("videoModeButton");
+      const languageButton = $("languageButton");
+
+      const statusDot = $("statusDot");
+      const statusText = $("statusText");
+      const chatHeading = $("chatHeading");
+      const chatSubheading = $("chatSubheading");
+      const modeTag = $("modeTag");
+
+      const videoSection = $("videoSection");
+      const localVideo = $("localVideo");
+      const remoteVideo = $("remoteVideo");
+      const localPlaceholder = $("localPlaceholder");
+      const remotePlaceholder = $("remotePlaceholder");
+      const cameraButton = $("cameraButton");
+      const micButton = $("micButton");
+
+      const messages = $("messages");
+      const messageForm = $("messageForm");
+      const messageInput = $("messageInput");
+      const nextButton = $("nextButton");
+      const endButton = $("endButton");
+      const toast = $("toast");
+
+      let language = "fa";
+      let mode = "text";
+      let socket = null;
+      let matched = false;
+      let initiator = false;
+      let localStream = null;
+      let peer = null;
+      let pendingCandidates = [];
+      let sessionId = 0;
+      let cameraBusy = false;
+      let micEnabled = true;
+      let cameraEnabled = true;
+      let toastTimer = null;
+      let reconnecting = false;
+
+      const rtcConfig = {
+        iceServers: [
+          { urls: "stun:stun.l.google.com:19302" },
+          { urls: "stun:stun1.l.google.com:19302" }
+        ]
+      };
+
+      const words = {
+        fa: {
+          connecting: "در حال اتصال به سرور...",
+          searching: "در حال جست‌وجوی طرف مقابل...",
+          waiting: "در صف انتظار هستی؛ منتظر کاربر دیگری بمان.",
+          connected: "به سرور متصل شدی؛ در حال پیدا کردن طرف مقابل...",
+          matched: "طرف مقابل پیدا شد.",
+          matchedVideo: "طرف مقابل پیدا شد؛ برای شروع تصویر، دوربین را فعال کن.",
+          cameraDenied: "دسترسی دوربین یا میکروفون داده نشد. تنظیمات مجوز مرورگر را بررسی کن.",
+          cameraReady: "دوربین و میکروفون آماده‌اند؛ در حال اتصال تصویری...",
+          cameraError: "فعال‌کردن دوربین ناموفق بود. از HTTPS و مجوزهای مرورگر مطمئن شو.",
+          cameraOff: "دوربین فعال نیست. برای شروع تصویر دکمهٔ دوربین را بزن.",
+          micOn: "میکروفون فعال شد.",
+          micOff: "میکروفون خاموش شد.",
+          notMatched: "هنوز طرف مقابل پیدا نشده است.",
+          partnerLeft: "طرف مقابل از گفت‌وگو خارج شد. می‌توانی نفر بعدی را جست‌وجو کنی.",
+          ended: "گفت‌وگو پایان یافت.",
+          serverError: "ارتباط با سرور مشکل پیدا کرد. دوباره تلاش کن.",
+          connectionLost: "ارتباط قطع شد. برای شروع دوباره، به صفحهٔ اصلی برگرد.",
+          textMode: "گفت‌وگوی متنی",
+          videoMode: "گفت‌وگوی تصویری",
+          messagePlaceholder: "پیام خود را بنویس...",
+          emptyMessage: "ابتدا پیام بنویس.",
+          cameraNeedMatch: "ابتدا طرف مقابل را پیدا کن؛ سپس دوربین را فعال کن.",
+          videoUnavailable: "این مرورگر از تماس تصویری پشتیبانی نمی‌کند.",
+          videoFailed: "اتصال تصویری برقرار نشد. ممکن است شبکه به سرور TURN نیاز داشته باشد.",
+          backHome: "بازگشت به صفحهٔ اصلی",
+          systemStart: "گفت‌وگو شروع شد. محترمانه رفتار کن.",
+          waitingForVideo: "منتظر اتصال تصویری طرف مقابل هستیم...",
+          cameraAlreadyOn: "دوربین و میکروفون از قبل فعال‌اند."
+        },
+        en: {
+          connecting: "Connecting to server...",
+          searching: "Searching for a stranger...",
+          waiting: "You're in the queue. Waiting for another user.",
+          connected: "Connected to server; finding a stranger...",
+          matched: "A stranger was found.",
+          matchedVideo: "A stranger was found. Enable your camera to start video.",
+          cameraDenied: "Camera or microphone permission was denied. Check browser permissions.",
+          cameraReady: "Camera and microphone are ready; connecting video...",
+          cameraError: "Could not enable camera. Check HTTPS and browser permissions.",
+          cameraOff: "Camera is off. Press Enable camera to start video.",
+          micOn: "Microphone enabled.",
+          micOff: "Microphone muted.",
+          notMatched: "No stranger has been found yet.",
+          partnerLeft: "The stranger left. You can search for the next person.",
+          ended: "Chat ended.",
+          serverError: "A server connection error occurred. Try again.",
+          connectionLost: "Connection lost. Return home to start again.",
+          textMode: "Text chat",
+          videoMode: "Video chat",
+          messagePlaceholder: "Write a message...",
+          emptyMessage: "Write a message first.",
+          cameraNeedMatch: "Find a stranger first, then enable the camera.",
+          videoUnavailable: "This browser does not support video calls.",
+          videoFailed: "Video connection failed. This network may need a TURN server.",
+          backHome: "Back to home",
+          systemStart: "Chat started. Please be respectful.",
+          waitingForVideo: "Waiting for the other person's video...",
+          cameraAlreadyOn: "Camera and microphone are already enabled."
+        }
+      };
+
+      function t(key) {
+        return words[language][key] || key;
       }
 
-      const exists = stream.getTracks().some(
-        track => track.id === event.track.id
-      );
+      function applyLanguage() {
+        document.documentElement.lang = language;
+        document.documentElement.dir = language === "fa" ? "rtl" : "ltr";
 
-      if (!exists) stream.addTrack(event.track);
-    }
+        document.querySelectorAll("[data-fa][data-en]").forEach((element) => {
+          element.textContent = element.dataset[language];
+        });
 
-    remoteVideoPlaceholder.classList.add("hidden");
-    videoStatus.textContent = t("videoConnected");
+        languageButton.textContent = language === "fa" ? "EN" : "فا";
+        messageInput.placeholder = t("messagePlaceholder");
+        messageInput.setAttribute("aria-label", t("messagePlaceholder"));
 
-    remoteVideo.play().catch(err => {
-      console.warn("Remote video autoplay was blocked:", err);
-    });
-  };
+        chatHeading.textContent = "OMEGLE";
+        chatSubheading.textContent =
+          mode === "video" ? t("videoMode") : t("textMode");
+      }
 
-  pc.onconnectionstatechange = () => {
-    if (peer !== pc) return;
-
-    console.log("WebRTC connection state:", pc.connectionState);
-
-    if (pc.connectionState === "connected") {
-      videoStatus.textContent = t("videoConnected");
-    } else if (pc.connectionState === "failed") {
-      videoStatus.textContent = t("videoFailed");
-    } else if (pc.connectionState === "disconnected") {
-      videoStatus.textContent = t("videoFailed");
-    }
-  };
-
-  pc.oniceconnectionstatechange = () => {
-    if (peer !== pc) return;
-
-    console.log("ICE connection state:", pc.iceConnectionState);
-
-    if (pc.iceConnectionState === "failed") {
-      videoStatus.textContent = t("videoFailed");
-    }
-  };
-
-  pc.onicegatheringstatechange = () => {
-    if (peer === pc) {
-      console.log("ICE gathering state:", pc.iceGatheringState);
-    }
-  };
-
-  if (initiator) {
-    try {
-      const offer = await pc.createOffer();
-
-      if (peer !== pc) return null;
-
-      await pc.setLocalDescription(offer);
-
-      if (peer !== pc) return null;
-
-      send({
-        type: "offer",
-        offer: pc.localDescription
+      languageButton.addEventListener("click", () => {
+        language = language === "fa" ? "en" : "fa";
+        applyLanguage();
       });
-    } catch (err) {
-      console.error("Creating offer failed:", err);
-      videoStatus.textContent = t("videoFailed");
-    }
-  }
 
-  return pc;
-}
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add("show");
 
-async function enableCamera(showMessage = true) {
-  if (localStream) {
-    if (matched && mode === "video") {
-      await createPeer(isInitiator);
-    }
-    return true;
-  }
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toast.classList.remove("show");
+        }, 3500);
+      }
 
-  const requestId = ++cameraRequestId;
-  const thisSession = sessionId;
+      function setStatus(message, state = "normal") {
+        statusText.textContent = message;
+        statusDot.className = "status-dot";
 
-  try {
-    if (!navigator.mediaDevices ||
-        !navigator.mediaDevices.getUserMedia) {
-      throw new Error("Camera API unavailable; use HTTPS.");
-    }
+        if (state === "online") statusDot.classList.add("online");
+        if (state === "searching") statusDot.classList.add("searching");
+        if (state === "error") statusDot.classList.add("error");
+      }
 
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true
-    });
+      function showScreen(screen) {
+        homeScreen.classList.toggle("active", screen === "home");
+        chatScreen.classList.toggle("active", screen === "chat");
+      }
 
-    if (requestId !== cameraRequestId || thisSession !== sessionId) {
-      stream.getTracks().forEach(track => track.stop());
-      return false;
-    }
+      function addMessage(text, type = "system") {
+        const element = document.createElement("div");
+        element.className = `message ${type}`;
+        element.textContent = text;
+        messages.appendChild(element);
+        messages.scrollTop = messages.scrollHeight;
+      }
 
-    localStream = stream;
-    localVideo.srcObject = stream;
-    videoPlaceholder.classList.add("hidden");
+      function clearMessages() {
+        messages.replaceChildren();
+      }
 
-    localVideo.play().catch(err => {
-      console.warn("Local video autoplay was blocked:", err);
-    });
+      function send(data) {
+        if (socket && socket.readyState === WebSocket.OPEN) {
+          socket.send(JSON.stringify(data));
+          return true;
+        }
+        return false;
+      }
 
-    videoStatus.textContent = t("cameraReady");
+      function isSocketOpen() {
+        return socket && socket.readyState === WebSocket.OPEN;
+      }
 
-    if (matched && mode === "video") {
-      await createPeer(isInitiator);
-    } else if (showMessage) {
-      showToast(t("cameraReady"));
-    }
+      function connect() {
+        const thisSession = sessionId;
 
-    return true;
-  } catch (err) {
-    console.error("Camera/microphone access failed:", err);
+        setStatus(t("connecting"), "searching");
 
-    videoStatus.textContent = t("cameraDenied");
-    showToast(t("cameraDenied"));
+        let newSocket;
 
-    return false;
-  }
-}
+        try {
+          newSocket = new WebSocket(SERVER_URL);
+        } catch (_) {
+          setStatus(t("serverError"), "error");
+          showToast(t("serverError"));
+          return;
+        }
 
-function findNext() {
-  if (searching) {
-    showToast(t("searching"));
-    return;
-  }
+        socket = newSocket;
 
-  if (!socket || socket.readyState !== WebSocket.OPEN) {
-    closeConnection();
-    connect();
-    return;
-  }
+        newSocket.addEventListener("open", () => {
+          if (thisSession !== sessionId || socket !== newSocket) return;
 
-  if (!send({ type: "next" })) return;
+          reconnecting = false;
+          setStatus(t("connected"), "searching");
 
-  matched = false;
-  searching = true;
-  isInitiator = false;
+          // The server accepts { type: "find", mode: "text" | "video" }.
+          send({ type: "find", mode });
+        });
 
-  cleanupPeer(true);
-  stopLocal();
+        newSocket.addEventListener("message", async (event) => {
+          if (thisSession !== sessionId || socket !== newSocket) return;
 
-  clearMessages(t("searching"));
-  chatSubtitle.textContent = t("searching");
-  videoStatus.textContent = t("cameraReady");
-}
+          let data;
 
-function endChat() {
-  if (socket && socket.readyState === WebSocket.OPEN) {
-    send({ type: "end" });
-  }
+          try {
+            data = JSON.parse(event.data);
+          } catch (_) {
+            return;
+          }
 
-  closeConnection();
+          await handleServerMessage(data, thisSession);
+        });
 
-  chat.classList.add("hidden");
-  home.classList.remove("hidden");
-  videoArea.classList.add("hidden");
+        newSocket.addEventListener("close", () => {
+          if (thisSession !== sessionId || socket !== newSocket) return;
 
-  $("findText").disabled = false;
-  $("findVideo").disabled = false;
+          socket = null;
+          matched = false;
+          cleanupPeer();
+          setStatus(t("connectionLost"), "error");
+          reconnecting = false;
+        });
 
-  showToast(t("ended"));
-}
+        newSocket.addEventListener("error", () => {
+          if (thisSession !== sessionId) return;
 
-$("findText").addEventListener("click", () => openChat("text"));
-$("findVideo").addEventListener("click", () => openChat("video"));
-$("backHome").addEventListener("click", endChat);
-$("endBtn").addEventListener("click", endChat);
-$("nextBtn").addEventListener("click", findNext);
-$("cameraBtn").addEventListener("click", () => enableCamera(true));
+          setStatus(t("serverError"), "error");
+        });
+      }
 
-$("reportBtn").addEventListener("click", () => {
-  showToast(t("reportUnavailable"));
-  systemMessage(t("report"));
-});
+      async function handleServerMessage(data, thisSession) {
+        if (!data || typeof data.type !== "string") return;
 
-messageForm.addEventListener("submit", event => {
-  event.preventDefault();
+        switch (data.type) {
+          case "connected":
+            break;
 
-  const text = messageInput.value.trim();
+          case "waiting":
+          case "searching":
+            matched = false;
+            setStatus(t("waiting"), "searching");
+            break;
 
-  if (!text) {
-    showToast(t("empty"));
-    return;
-  }
+          case "matched":
+            matched = true;
+            initiator = data.initiator === true;
 
-  if (!matched) {
-    showToast(t("sendFirst"));
-    return;
-  }
+            setStatus(
+              mode === "video" ? t("matchedVideo") : t("matched"),
+              "online"
+            );
 
-  if (send({ type: "message", text })) {
-    addMessage(text, true);
-    messageInput.value = "";
-    messageInput.focus();
-  }
-});
+            addMessage(t("systemStart"), "system");
 
-window.addEventListener("beforeunload", () => {
-  if (socket) {
-    try {
-      socket.close();
-    } catch (err) {
-      console.warn(err);
-    }
-  }
+            if (mode === "video") {
+              if (localStream) {
+                try {
+                  await createPeer(initiator, thisSession);
+                } catch (error) {
+                  console.error("Peer creation error:", error);
+                  setStatus(t("videoFailed"), "error");
+                }
+              } else {
+                setStatus(t("matchedVideo"), "online");
+              }
+            }
+            break;
 
-  stopLocal();
-  cleanupPeer(true);
-});
+          case "message":
+            if (typeof data.text === "string") {
+              addMessage(data.text, "theirs");
+            }
+            break;
 
-if (window.Telegram && window.Telegram.WebApp) {
-  window.Telegram.WebApp.ready();
-  window.Telegram.WebApp.expand();
-}
+          case "partner_left":
+            matched = false;
+            cleanupPeer();
+            setStatus(t("partnerLeft"), "normal");
+            addMessage(t("partnerLeft"), "system");
+            break;
 
-translatePage();
-console.log("OMEGLE frontend loaded");
-})();
-</script>
+          case "offer":
+            await handleOffer(data, thisSession);
+            break;
 
+          case "answer":
+            await handleAnswer(data, thisSession);
+            break;
+
+          case "ice-candidate":
+          case "candidate":
+            await handleCandidate(data);
+            break;
+
+          case "next":
+            matched = false;
+            cleanupPeer();
+            setStatus(t("searching"), "searching");
+            break;
+
+          case "end":
+          case "ended":
+            matched = false;
+            cleanupPeer();
+            setStatus(t("ended"), "normal");
+            break;
+
+          case "error":
+            if (data.message === "not_matched") {
+              setStatus(t("notMatched"), "normal");
+            } else {
+              console.warn("Server error:", data.message);
+              showToast(t("serverError"));
+            }
+            break;
+        }
+      }
+
+      async function createPeer(shouldInitiate, thisSession = sessionId) {
+        if (thisSession !== sessionId) return null;
+
+        if (mode !== "video" || !localStream) return null;
+
+        if (peer) {
+          return peer;
+        }
+
+        if (!("RTCPeerConnection" in window)) {
+          showToast(t("videoUnavailable"));
+          return null;
+        }
+
+        const pc = new RTCPeerConnection(rtcConfig);
+        peer = pc;
+        pendingCandidates = [];
+
+        localStream.getTracks().forEach((track) => {
+          pc.addTrack(track, localStream);
+        });
+
+        pc.onicecandidate = (event) => {
+          if (event.candidate && peer === pc) {
+            send({
+              type: "ice-candidate",
+              candidate: event.candidate
+            });
+          }
+        };
+
+        pc.ontrack = (event) => {
+          if (peer !== pc) return;
+
+          const stream = event.streams && event.streams[0];
+
+          if (stream) {
+            remoteVideo.srcObject = stream;
+            remotePlaceholder.style.display = "none";
+            remoteVideo.play().catch(() => {});
+          }
+        };
+
+        pc.onconnectionstatechange = () => {
+          if (peer !== pc) return;
+
+          if (pc.connectionState === "connected") {
+            setStatus(
+              language === "fa"
+                ? "تماس تصویری متصل شد."
+                : "Video call connected.",
+              "online"
+            );
+          } else if (pc.connectionState === "failed") {
+            setStatus(t("videoFailed"), "error");
+          } else if (pc.connectionState === "disconnected") {
+            setStatus(
+              language === "fa"
+                ? "اتصال تصویری ناپایدار شده است."
+                : "Video connection is unstable.",
+              "error"
+            );
+          }
+        };
+
+        pc.oniceconnectionstatechange = () => {
+          if (peer !== pc) return;
+
+          if (pc.iceConnectionState === "failed") {
+            setStatus(t("videoFailed"), "error");
+          }
+        };
+
+        if (shouldInitiate) {
+          const offer = await pc.createOffer();
+          if (peer !== pc || thisSession !== sessionId) return pc;
+
+          await pc.setLocalDescription(offer);
+          if (peer !== pc || thisSession !== sessionId) return pc;
+
+          send({
+            type: "offer",
+            offer: pc.localDescription
+          });
+        }
+
+        return pc;
+      }
+
+      async function handleOffer(data, thisSession) {
+        if (mode !== "video") {
+          // This app expects both users to choose the same chat mode.
+          showToast(
+            language === "fa"
+              ? "نوع چت دو کاربر هماهنگ نیست. به صفحهٔ اصلی برگرد و چت تصویری را انتخاب کن."
+              : "Chat modes do not match. Return home and choose video chat."
+          );
+          return;
+        }
+
+        const offer = data.offer || data.description;
+
+        if (!offer || typeof offer.sdp !== "string") return;
+
+        try {
+          if (!localStream) {
+            setStatus(t("matchedVideo"), "online");
+            return;
+          }
+
+          const pc = await createPeer(false, thisSession);
+          if (!pc || thisSession !== sessionId || peer !== pc) return;
+
+          await pc.setRemoteDescription(new RTCSessionDescription(offer));
+          await flushCandidates(pc);
+
+          const answer = await pc.createAnswer();
+          await pc.setLocalDescription(answer);
+
+          if (peer !== pc || thisSession !== sessionId) return;
+
+          send({
+            type: "answer",
+            answer: pc.localDescription
+          });
+
+          setStatus(t("waitingForVideo"), "searching");
+        } catch (error) {
+          console.error("Offer handling error:", error);
+          setStatus(t("videoFailed"), "error");
+        }
+      }
+
+      async function handleAnswer(data, thisSession) {
+        const answer = data.answer || data.description;
+        const pc = peer;
+
+        if (!pc || !answer || typeof answer.sdp !== "string") return;
+
+        try {
+          if (thisSession !== sessionId || peer !== pc) return;
+
+          await pc.setRemoteDescription(new RTCSessionDescription(answer));
+          await flushCandidates(pc);
+        } catch (error) {
+          console.error("Answer handling error:", error);
+          setStatus(t("videoFailed"), "error");
+        }
+      }
+
+      async function handleCandidate(data) {
+        const candidate = data.candidate;
+        if (!candidate) return;
+
+        const pc = peer;
+
+        if (!pc) {
+          pendingCandidates.push(candidate);
+          return;
+        }
+
+        if (!pc.remoteDescription) {
+          pendingCandidates.push(candidate);
+          return;
+        }
+
+        try {
+          await pc.addIceCandidate(new RTCIceCandidate(candidate));
+        } catch (error) {
+          console.warn("ICE candidate error:", error);
+        }
+      }
+
+      async function flushCandidates(pc) {
+        if (!pc || !pc.remoteDescription) return;
+
+        const candidates = pendingCandidates.splice(0);
+
+        for (const candidate of candidates) {
+          if (peer !== pc) return;
+
+          try {
+            await pc.addIceCandidate(new RTCIceCandidate(candidate));
+          } catch (error) {
+            console.warn("Queued ICE candidate error:", error);
+          }
+        }
+      }
+
+      async function enableCamera() {
+        if (mode !== "video") return;
+
+        if (!matched) {
+          showToast(t("cameraNeedMatch"));
+          return;
+        }
+
+        if (cameraBusy) return;
+
+        if (localStream) {
+          showToast(t("cameraAlreadyOn"));
+
+          if (!peer && matched) {
+            try {
+              await createPeer(initiator, sessionId);
+            } catch (error) {
+              console.error(error);
+              setStatus(t("videoFailed"), "error");
+            }
+          }
+          return;
+        }
+
+        if (!navigator.mediaDevices ||
+            typeof navigator.mediaDevices.getUserMedia !== "function") {
+          showToast(t("videoUnavailable"));
+          return;
+        }
+
+        cameraBusy = true;
+        cameraButton.disabled = true;
+        setStatus(t("cameraReady"), "searching");
+
+        const thisSession = sessionId;
+
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: {
+              facingMode: "user",
+              width: { ideal: 640 },
+              height: { ideal: 480 },
+              frameRate: { ideal: 24, max: 30 }
+            }
+          });
+
+          if (thisSession !== sessionId) {
+            stream.getTracks().forEach((track) => track.stop());
+            return;
+          }
+
+          localStream = stream;
+          cameraEnabled = true;
+          micEnabled = stream.getAudioTracks().some((track) => track.enabled);
+
+          localVideo.srcObject = stream;
+          localPlaceholder.style.display = "none";
+          localVideo.play().catch(() => {});
+
+          updateMediaButtons();
+
+          if (matched) {
+            await createPeer(initiator, thisSession);
+          }
+        } catch (error) {
+          console.error("getUserMedia error:", error);
+
+          if (thisSession === sessionId) {
+            setStatus(t("cameraError"), "error");
+            showToast(t("cameraDenied"));
+          }
+        } finally {
+          cameraBusy = false;
+          cameraButton.disabled = false;
+        }
+      }
+
+      function updateMediaButtons() {
+        const cameraLabel = cameraButton.querySelector("span");
+        const micLabel = micButton.querySelector("span");
+
+        if (cameraLabel) {
+          cameraLabel.textContent =
+            language === "fa"
+              ? (cameraEnabled && localStream
+                  ? "خاموش‌کردن دوربین"
+                  : "فعال‌کردن دوربین")
+              : (cameraEnabled && localStream
+                  ? "Turn camera off"
+                  : "Enable camera");
+        }
+
+        if (micLabel) {
+          micLabel.textContent =
+            language === "fa"
+              ? (micEnabled ? "خاموش‌کردن میکروفون" : "فعال‌کردن میکروفون")
+              : (micEnabled ? "Mute microphone" : "Enable microphone");
+        }
+      }
+
+      function toggleCamera() {
+        if (!localStream) {
+          enableCamera();
+          return;
+        }
+
+        cameraEnabled = !cameraEnabled;
+
+        localStream.getVideoTracks().forEach((track) => {
+          track.enabled = cameraEnabled;
+        });
+
+        updateMediaButtons();
+      }
+
+      function toggleMic() {
+        if (!localStream) {
+          enableCamera();
+          return;
+        }
+
+        micEnabled = !micEnabled;
+
+        localStream.getAudioTracks().forEach((track) => {
+          track.enabled = micEnabled;
+        });
+
+        updateMediaButtons();
+        showToast(t(micEnabled ? "micOn" : "micOff"));
+      }
+
+      function cleanupPeer() {
+        const oldPeer = peer;
+        peer = null;
+        pendingCandidates = [];
+
+        if (oldPeer) {
+          oldPeer.ontrack = null;
+          oldPeer.onicecandidate = null;
+          oldPeer.onconnectionstatechange = null;
+          oldPeer.oniceconnectionstatechange = null;
+
+          try {
+            oldPeer.close();
+          } catch (_) {}
+        }
+
+        remoteVideo.srcObject = null;
+        remotePlaceholder.style.display = "grid";
+      }
+
+      function stopLocalStream() {
+        if (localStream) {
+          localStream.getTracks().forEach((track) => {
+            try {
+              track.stop();
+            } catch (_) {}
+          });
+        }
+
+        localStream = null;
+        localVideo.srcObject = null;
+        localPlaceholder.style.display = "grid";
+        cameraEnabled = true;
+        micEnabled = true;
+        updateMediaButtons();
+      }
+
+      function closeSocket() {
+        const oldSocket = socket;
+        socket = null;
+
+        if (oldSocket) {
+          try {
+            oldSocket.onopen = null;
+            oldSocket.onmessage = null;
+            oldSocket.onclose = null;
+            oldSocket.onerror = null;
+            oldSocket.close();
+          } catch (_) {}
+        }
+      }
+
+      function resetCurrentChat() {
+        sessionId++;
+        matched = false;
+        initiator = false;
+        reconnecting = false;
+        cleanupPeer();
+        stopLocalStream();
+        closeSocket();
+      }
+
+      function openChat(nextMode) {
+        resetCurrentChat();
+
+        mode = nextMode;
+        applyLanguage();
+
+        modeTag.textContent = mode === "video" ? "VIDEO" : "TEXT";
+        videoSection.hidden = mode !== "video";
+        messageInput.disabled = false;
+        nextButton.disabled = false;
+        endButton.disabled = false;
+
+        clearMessages();
+        addMessage(
+          language === "fa"
+            ? "در حال آماده‌سازی گفت‌وگو..."
+            : "Preparing your chat...",
+          "system"
+        );
+
+        showScreen("chat");
+        connect();
+      }
+
+      function goNext() {
+        if (!isSocketOpen()) {
+          showToast(t("connectionLost"));
+          return;
+        }
+
+        // The current server disconnects the old partner and searches
+        // for a new one after receiving { type: "next" }.
+        send({ type: "next" });
+
+        matched = false;
+        cleanupPeer();
+
+        // Keep the local camera stream so it can be reused after a match.
+        setStatus(t("searching"), "searching");
+        addMessage(
+          language === "fa"
+            ? "در حال جست‌وجوی نفر بعدی..."
+            : "Searching for the next person...",
+          "system"
+        );
+      }
+
+      function endChat() {
+        send({ type: "end" });
+        resetCurrentChat();
+        showScreen("home");
+      }
+
+      textModeButton.addEventListener("click", () => openChat("text"));
+      videoModeButton.addEventListener("click", () => openChat("video"));
+
+      cameraButton.addEventListener("click", toggleCamera);
+      micButton.addEventListener("click", toggleMic);
+      nextButton.addEventListener("click", goNext);
+      endButton.addEventListener("click", endChat);
+
+      messageForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const text = messageInput.value.trim();
+
+        if (!text) {
+          showToast(t("emptyMessage"));
+          return;
+        }
+
+        if (!matched || !isSocketOpen()) {
+          showToast(t("notMatched"));
+          return;
+        }
+
+        if (text.length > 1000) {
+          showToast(
+            language === "fa"
+              ? "پیام بیش از حد طولانی است."
+              : "Message is too long."
+          );
+          return;
+        }
+
+        const sent = send({ type: "message", text });
+
+        if (sent) {
+          addMessage(text, "mine");
+          messageInput.value = "";
+          messageInput.focus();
+        } else {
+          showToast(t("serverError"));
+        }
+      });
+
+      window.addEventListener("pagehide", () => {
+        try {
+          send({ type: "end" });
+          closeSocket();
+        } catch (_) {}
+
+        cleanupPeer();
+        stopLocalStream();
+      });
+
+      applyLanguage();
+      updateMediaButtons();
+    })();
+  </script>
 </body>
 </html>
