@@ -7,6 +7,7 @@
 <meta name="description" content="OMEGLE — چت تصادفی متنی و تصویری">
 <title>OMEGLE — Random Chat</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
 <style>
 :root {
   color-scheme: dark;
@@ -22,8 +23,10 @@
 }
 * { box-sizing:border-box; }
 html,body {
-  margin:0; min-height:100%;
-  background:var(--bg); color:var(--text);
+  margin:0;
+  min-height:100%;
+  background:var(--bg);
+  color:var(--text);
   font-family:Inter,system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;
 }
 body {
@@ -34,97 +37,184 @@ button,input { font:inherit; }
 button { cursor:pointer; }
 button:disabled { opacity:.55; cursor:wait; }
 button:focus-visible,input:focus-visible {
-  outline:2px solid var(--red); outline-offset:3px;
+  outline:2px solid var(--red);
+  outline-offset:3px;
 }
 .app {
-  width:min(100%,760px); min-height:100vh; margin:auto;
-  padding:20px 18px 16px; display:flex; flex-direction:column;
+  width:min(100%,760px);
+  min-height:100vh;
+  margin:auto;
+  padding:20px 18px 16px;
+  display:flex;
+  flex-direction:column;
 }
 .topbar {
-  display:flex; align-items:center; justify-content:space-between;
-  gap:12px; border-bottom:1px solid #ffffff12; padding:4px 0 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  border-bottom:1px solid #ffffff12;
+  padding:4px 0 18px;
 }
 .brand { font-size:20px; font-weight:900; letter-spacing:1.5px; }
 .brand span { color:var(--red); }
 .topbar-right { display:flex; align-items:center; gap:16px; }
 .online {
-  display:flex; align-items:center; gap:8px;
-  color:#c8c8cf; font-size:11px; letter-spacing:1px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#c8c8cf;
+  font-size:11px;
+  letter-spacing:1px;
 }
 .online i {
-  width:7px; height:7px; border-radius:50%;
-  background:var(--green); box-shadow:0 0 12px #45e0a077;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 12px #45e0a077;
 }
 .language-switch {
-  display:flex; padding:3px; border:1px solid var(--line);
-  border-radius:10px; background:#111;
+  display:flex;
+  padding:3px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#111;
 }
 .lang-option {
-  border:0; border-radius:7px; padding:6px 10px;
-  background:transparent; color:var(--muted); font-size:12px;
+  border:0;
+  border-radius:7px;
+  padding:6px 10px;
+  background:transparent;
+  color:var(--muted);
+  font-size:12px;
 }
 .lang-option.active { background:#32101a; color:white; }
 .main { flex:1; display:flex; align-items:center; }
-.home { width:100%; position:relative; text-align:center; padding:44px 0 28px; }
+.home {
+  width:100%;
+  position:relative;
+  text-align:center;
+  padding:44px 0 28px;
+}
 .hero-glow {
-  position:absolute; width:260px; height:260px; left:50%; top:35px;
-  transform:translateX(-50%); background:#d10f3620;
-  filter:blur(70px); pointer-events:none;
+  position:absolute;
+  width:260px;
+  height:260px;
+  left:50%;
+  top:35px;
+  transform:translateX(-50%);
+  background:#d10f3620;
+  filter:blur(70px);
+  pointer-events:none;
 }
 .globe {
-  position:relative; margin:0 auto 22px; width:74px; height:74px;
-  border:1px solid #ff294b70; border-radius:24px;
-  display:grid; place-items:center; color:var(--red); font-size:44px;
+  position:relative;
+  margin:0 auto 22px;
+  width:74px;
+  height:74px;
+  border:1px solid #ff294b70;
+  border-radius:24px;
+  display:grid;
+  place-items:center;
+  color:var(--red);
+  font-size:44px;
   box-shadow:0 0 50px #ff294b12;
 }
 .eyebrow {
-  position:relative; color:var(--red); font-size:11px;
-  letter-spacing:2px; font-weight:800;
+  position:relative;
+  color:var(--red);
+  font-size:11px;
+  letter-spacing:2px;
+  font-weight:800;
 }
 .home h1 {
-  position:relative; font-size:clamp(36px,8vw,62px);
-  line-height:1.3; letter-spacing:-1px; margin:18px 0;
+  position:relative;
+  font-size:clamp(36px,8vw,62px);
+  line-height:1.3;
+  letter-spacing:-1px;
+  margin:18px 0;
 }
 .home h1 span { color:var(--red); }
 .description {
-  position:relative; color:#b7b7c0; font-size:15px;
-  line-height:1.9; max-width:420px; margin:0 auto 28px;
+  position:relative;
+  color:#b7b7c0;
+  font-size:15px;
+  line-height:1.9;
+  max-width:420px;
+  margin:0 auto 28px;
 }
 .home-actions {
-  position:relative; display:grid; grid-template-columns:1fr 1fr;
-  gap:12px; max-width:470px; margin:0 auto;
+  position:relative;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  max-width:470px;
+  margin:0 auto;
 }
 .primary,.secondary,.end-button,.camera-button {
-  min-height:50px; padding:13px 16px; border-radius:14px;
-  font-weight:750; border:1px solid transparent;
-  display:flex; align-items:center; justify-content:center; gap:12px;
+  min-height:50px;
+  padding:13px 16px;
+  border-radius:14px;
+  font-weight:750;
+  border:1px solid transparent;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
 }
 .primary {
   background:linear-gradient(135deg,var(--red),var(--red2));
-  color:white; box-shadow:0 8px 30px #ff294b24;
+  color:white;
+  box-shadow:0 8px 30px #ff294b24;
 }
-.secondary { background:#151519; border-color:#33333b; color:#f3f3f6; }
+.secondary {
+  background:#151519;
+  border-color:#33333b;
+  color:#f3f3f6;
+}
 .primary:hover,.camera-button:hover { filter:brightness(1.08); }
 .secondary:hover { border-color:#6b2a39; }
 .feature-row {
-  display:flex; justify-content:center; gap:26px;
-  margin:30px 0 20px; color:#c9c9d0; font-size:13px;
+  display:flex;
+  justify-content:center;
+  gap:26px;
+  margin:30px 0 20px;
+  color:#c9c9d0;
+  font-size:13px;
 }
 .feature { display:flex; align-items:center; gap:8px; }
 .feature-icon { color:var(--red); font-size:20px; }
 .privacy {
-  max-width:490px; margin:0 auto; background:#141114;
-  border:1px solid #ff294b24; color:#c7bbc0; border-radius:12px;
-  padding:12px 14px; font-size:12px; line-height:1.8;
-  display:flex; justify-content:center; gap:8px;
+  max-width:490px;
+  margin:0 auto;
+  background:#141114;
+  border:1px solid #ff294b24;
+  color:#c7bbc0;
+  border-radius:12px;
+  padding:12px 14px;
+  font-size:12px;
+  line-height:1.8;
+  display:flex;
+  justify-content:center;
+  gap:8px;
 }
 .privacy span:first-child { color:var(--red); }
 .chat { width:100%; padding:18px 0 12px; }
 .hidden { display:none!important; }
-.chat-heading { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+.chat-heading {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:16px;
+}
 .back,.report {
-  border:1px solid var(--line); background:#151519; color:white;
-  border-radius:11px; min-width:42px; height:42px;
+  border:1px solid var(--line);
+  background:#151519;
+  color:white;
+  border-radius:11px;
+  min-width:42px;
+  height:42px;
 }
 .chat-heading-info { flex:1; min-width:0; }
 .chat-title { font-weight:800; }
@@ -133,79 +223,157 @@ button:focus-visible,input:focus-visible {
 .video-area { margin-bottom:14px; }
 .video-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 .video-card {
-  position:relative; min-height:145px; aspect-ratio:4/3;
-  background:#0d0d10; border:1px solid #292930;
-  border-radius:16px; overflow:hidden;
+  position:relative;
+  min-height:145px;
+  aspect-ratio:4/3;
+  background:#0d0d10;
+  border:1px solid #292930;
+  border-radius:16px;
+  overflow:hidden;
 }
 .video-card video {
-  width:100%; height:100%; object-fit:cover;
-  position:absolute; inset:0; background:#080809;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  position:absolute;
+  inset:0;
+  background:#080809;
 }
 .video-placeholder {
-  position:absolute; inset:0; display:flex; flex-direction:column;
-  align-items:center; justify-content:center; text-align:center;
-  padding:12px; background:linear-gradient(145deg,#17171d,#0c0c0f);
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:12px;
+  background:linear-gradient(145deg,#17171d,#0c0c0f);
 }
 .video-placeholder p { margin:9px 0 3px; font-size:13px; }
-.video-placeholder small { color:var(--muted); font-size:10px; line-height:1.5; }
+.video-placeholder small {
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.5;
+}
 .camera-icon { font-size:26px; color:var(--red); }
 .video-label {
-  position:absolute; bottom:8px; right:8px; background:#0009;
-  border:1px solid #ffffff18; border-radius:7px; padding:4px 8px;
+  position:absolute;
+  bottom:8px;
+  right:8px;
+  background:#0009;
+  border:1px solid #ffffff18;
+  border-radius:7px;
+  padding:4px 8px;
   font-size:10px;
 }
-.video-status { color:var(--muted); font-size:12px; padding:10px 2px; text-align:center; }
+.video-status {
+  color:var(--muted);
+  font-size:12px;
+  padding:10px 2px;
+  text-align:center;
+}
 .camera-button {
-  width:100%; background:#32101a; border-color:#792034;
-  color:white; min-height:44px;
+  width:100%;
+  background:#32101a;
+  border-color:#792034;
+  color:white;
+  min-height:44px;
 }
 .messages {
-  height:min(38vh,340px); min-height:190px; overflow:auto;
-  display:flex; flex-direction:column; gap:10px; padding:14px;
-  background:#0d0d10; border:1px solid var(--line);
-  border-radius:16px; scroll-behavior:smooth;
+  height:min(38vh,340px);
+  min-height:190px;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  padding:14px;
+  background:#0d0d10;
+  border:1px solid var(--line);
+  border-radius:16px;
+  scroll-behavior:smooth;
 }
 .system-message {
-  text-align:center; color:var(--muted); font-size:12px;
-  line-height:1.7; padding:8px; overflow-wrap:anywhere;
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.7;
+  padding:8px;
+  overflow-wrap:anywhere;
 }
 .message {
-  max-width:84%; padding:10px 13px; border-radius:14px;
-  line-height:1.65; font-size:14px; overflow-wrap:anywhere;
+  max-width:84%;
+  padding:10px 13px;
+  border-radius:14px;
+  line-height:1.65;
+  font-size:14px;
+  overflow-wrap:anywhere;
   white-space:pre-wrap;
 }
-.message.mine { align-self:flex-start; background:#5b1426; border:1px solid #a92743; }
-.message.theirs { align-self:flex-end; background:#1b1b21; border:1px solid #303038; }
+.message.mine {
+  align-self:flex-start;
+  background:#5b1426;
+  border:1px solid #a92743;
+}
+.message.theirs {
+  align-self:flex-end;
+  background:#1b1b21;
+  border:1px solid #303038;
+}
 .message-form { display:flex; gap:9px; margin:10px 0; }
 .message-form input {
-  min-width:0; flex:1; background:#151519; border:1px solid #303038;
-  border-radius:13px; padding:13px 14px; color:white;
+  min-width:0;
+  flex:1;
+  background:#151519;
+  border:1px solid #303038;
+  border-radius:13px;
+  padding:13px 14px;
+  color:white;
 }
 .message-form input::placeholder { color:#7f7f8a; }
 .message-form button {
-  width:48px; border:0; border-radius:13px;
-  background:var(--red); color:white; font-size:20px;
+  width:48px;
+  border:0;
+  border-radius:13px;
+  background:var(--red);
+  color:white;
+  font-size:20px;
 }
 .chat-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 .chat-actions button { min-height:44px; font-size:13px; }
 .end-button { background:#171114; border-color:#54202d; color:#ff8a9b; }
 footer {
-  display:flex; justify-content:center; align-items:center; gap:8px;
-  color:#74747f; font-size:11px; padding:18px 0 2px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  color:#74747f;
+  font-size:11px;
+  padding:18px 0 2px;
 }
 footer span:first-child { font-weight:900; letter-spacing:1px; color:#b9b9c2; }
 .footer-dot { color:var(--red); }
 .toast {
-  position:fixed; z-index:10; bottom:22px; left:50%;
-  transform:translateX(-50%); max-width:calc(100vw - 32px);
-  padding:12px 16px; border-radius:12px; background:#242429;
-  border:1px solid #45454e; color:white; font-size:13px;
-  box-shadow:0 12px 40px #0008; text-align:center;
+  position:fixed;
+  z-index:10;
+  bottom:22px;
+  left:50%;
+  transform:translateX(-50%);
+  max-width:calc(100vw - 32px);
+  padding:12px 16px;
+  border-radius:12px;
+  background:#242429;
+  border:1px solid #45454e;
+  color:white;
+  font-size:13px;
+  box-shadow:0 12px 40px #0008;
+  text-align:center;
 }
 .app[dir="ltr"] .video-label { right:auto; left:8px; }
 .app[dir="ltr"] .message.mine { align-self:flex-end; }
 .app[dir="ltr"] .message.theirs { align-self:flex-start; }
 .app[dir="ltr"] .privacy { direction:ltr; }
+
 @media(max-width:480px) {
   .app { padding:14px 13px 10px; }
   .topbar { padding-bottom:14px; }
@@ -225,12 +393,17 @@ footer span:first-child { font-weight:900; letter-spacing:1px; color:#b9b9c2; }
 }
 </style>
 </head>
+
 <body>
 <div class="app" id="app" lang="fa" dir="rtl">
+
 <header class="topbar">
   <div class="brand">OMEGLE<span>.</span></div>
   <div class="topbar-right">
-    <div class="online"><i></i><span data-fa="چت تصادفی" data-en="RANDOM CHAT">چت تصادفی</span></div>
+    <div class="online">
+      <i></i>
+      <span data-fa="چت تصادفی" data-en="RANDOM CHAT">چت تصادفی</span>
+    </div>
     <div class="language-switch" aria-label="انتخاب زبان">
       <button type="button" id="langFa" class="lang-option active" aria-pressed="true">فا</button>
       <button type="button" id="langEn" class="lang-option" aria-pressed="false">EN</button>
@@ -239,21 +412,55 @@ footer span:first-child { font-weight:900; letter-spacing:1px; color:#b9b9c2; }
 </header>
 
 <main class="main">
+
 <section class="home" id="home">
   <div class="hero-glow" aria-hidden="true"></div>
   <div class="globe" aria-hidden="true">◎</div>
-  <p class="eyebrow" data-fa="دنیای تو. ارتباط تو." data-en="YOUR WORLD. YOUR CONNECTION.">دنیای تو. ارتباط تو.</p>
-  <h1 data-fa="با دنیای جدید<br><span>آشنا شو.</span>" data-en="MEET SOMEONE<br><span>NEW.</span>">با دنیای جدید<br><span>آشنا شو.</span></h1>
-  <p class="description" data-fa="با افراد جدید آشنا شو و گفت‌وگوهای تازه‌ای را شروع کن." data-en="Meet new people and start a conversation.">با افراد جدید آشنا شو و گفت‌وگوهای تازه‌ای را شروع کن.</p>
+
+  <p class="eyebrow"
+     data-fa="دنیای تو. ارتباط تو."
+     data-en="YOUR WORLD. YOUR CONNECTION.">دنیای تو. ارتباط تو.</p>
+
+  <h1 data-fa="با دنیای جدید<br><span>آشنا شو.</span>"
+      data-en="MEET SOMEONE<br><span>NEW.</span>">
+    با دنیای جدید<br><span>آشنا شو.</span>
+  </h1>
+
+  <p class="description"
+     data-fa="با افراد جدید آشنا شو و گفت‌وگوهای تازه‌ای را شروع کن."
+     data-en="Meet new people and start a conversation.">
+    با افراد جدید آشنا شو و گفت‌وگوهای تازه‌ای را شروع کن.
+  </p>
+
   <div class="home-actions">
-    <button class="primary" id="findText" type="button"><span data-fa="شروع چت متنی" data-en="Start Text Chat">شروع چت متنی</span><span aria-hidden="true">↗</span></button>
-    <button class="secondary" id="findVideo" type="button"><span data-fa="شروع چت تصویری" data-en="Start Video Chat">شروع چت تصویری</span><span aria-hidden="true">◉</span></button>
+    <button class="primary" id="findText" type="button">
+      <span data-fa="شروع چت متنی" data-en="Start Text Chat">شروع چت متنی</span>
+      <span aria-hidden="true">↗</span>
+    </button>
+    <button class="secondary" id="findVideo" type="button">
+      <span data-fa="شروع چت تصویری" data-en="Start Video Chat">شروع چت تصویری</span>
+      <span aria-hidden="true">◉</span>
+    </button>
   </div>
+
   <div class="feature-row">
-    <div class="feature"><span class="feature-icon">◎</span><span data-fa="گفت‌وگوی تصادفی" data-en="Random chat">گفت‌وگوی تصادفی</span></div>
-    <div class="feature"><span class="feature-icon">◇</span><span data-fa="حفظ حریم خصوصی" data-en="Privacy first">حفظ حریم خصوصی</span></div>
+    <div class="feature">
+      <span class="feature-icon">◎</span>
+      <span data-fa="گفت‌وگوی تصادفی" data-en="Random chat">گفت‌وگوی تصادفی</span>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">◇</span>
+      <span data-fa="حفظ حریم خصوصی" data-en="Privacy first">حفظ حریم خصوصی</span>
+    </div>
   </div>
-  <div class="privacy"><span aria-hidden="true">♢</span><span data-fa="اطلاعات شخصی و رمزهای خود را به افراد ناشناس نده." data-en="Never share personal information or passwords.">اطلاعات شخصی و رمزهای خود را به افراد ناشناس نده.</span></div>
+
+  <div class="privacy">
+    <span aria-hidden="true">♢</span>
+    <span data-fa="اطلاعات شخصی و رمزهای خود را به افراد ناشناس نده."
+          data-en="Never share personal information or passwords.">
+      اطلاعات شخصی و رمزهای خود را به افراد ناشناس نده.
+    </span>
+  </div>
 </section>
 
 <section class="chat hidden" id="chat">
@@ -263,198 +470,82 @@ footer span:first-child { font-weight:900; letter-spacing:1px; color:#b9b9c2; }
       <div class="chat-title" id="chatTitle">چت تصادفی</div>
       <div class="chat-subtitle" id="chatSubtitle">در حال اتصال...</div>
     </div>
-    <button class="report" id="reportBtn" type="button" data-fa="گزارش" data-en="Report">گزارش</button>
+    <button class="report" id="reportBtn" type="button"
+            data-fa="گزارش" data-en="Report">گزارش</button>
   </div>
 
   <div class="video-area hidden" id="videoArea">
     <div class="video-grid">
       <div class="video-card">
-        <video id="remoteVideo" autoplay playsinline aria-label="تصویر طرف مقابل"></video>
+        <video id="remoteVideo" autoplay playsinline
+               aria-label="تصویر طرف مقابل"></video>
         <div class="video-placeholder" id="remoteVideoPlaceholder">
           <div class="camera-icon">◉</div>
           <p data-fa="تصویر طرف مقابل" data-en="Stranger's video">تصویر طرف مقابل</p>
-          <small data-fa="منتظر برقراری تماس..." data-en="Waiting for video connection...">منتظر برقراری تماس...</small>
+          <small data-fa="منتظر برقراری تماس..." data-en="Waiting for video connection...">
+            منتظر برقراری تماس...
+          </small>
         </div>
         <div class="video-label" data-fa="طرف مقابل" data-en="Stranger">طرف مقابل</div>
       </div>
+
       <div class="video-card">
-        <video id="localVideo" autoplay muted playsinline aria-label="تصویر خودم"></video>
+        <video id="localVideo" autoplay muted playsinline
+               aria-label="تصویر خودم"></video>
         <div class="video-placeholder" id="videoPlaceholder">
           <div class="camera-icon">◉</div>
           <p data-fa="دوربین شما" data-en="Your camera">دوربین شما</p>
-          <small data-fa="برای شروع، دوربین را فعال کن." data-en="Enable your camera to begin.">برای شروع، دوربین را فعال کن.</small>
+          <small data-fa="برای شروع، دوربین را فعال کن."
+                 data-en="Enable your camera to begin.">
+            برای شروع، دوربین را فعال کن.
+          </small>
         </div>
         <div class="video-label" data-fa="شما" data-en="You">شما</div>
       </div>
     </div>
-    <div class="video-status" id="videoStatus" role="status">تماس تصویری هنوز برقرار نشده است.</div>
-    <button class="camera-button" id="cameraBtn" type="button" data-fa="فعال‌کردن دوربین و میکروفون" data-en="Enable Camera & Microphone">فعال‌کردن دوربین و میکروفون</button>
+
+    <div class="video-status" id="videoStatus" role="status">
+      تماس تصویری هنوز برقرار نشده است.
+    </div>
+
+    <button class="camera-button" id="cameraBtn" type="button"
+            data-fa="فعال‌کردن دوربین و میکروفون"
+            data-en="Enable Camera & Microphone">
+      فعال‌کردن دوربین و میکروفون
+    </button>
   </div>
 
   <div class="messages" id="messages" aria-live="polite">
     <div class="system-message">برای گفت‌وگو، ابتدا به یک کاربر متصل شو.</div>
   </div>
+
   <form class="message-form" id="messageForm" autocomplete="off">
-    <input id="messageInput" name="message" type="text" maxlength="1000" placeholder="پیامت را بنوی..." autocomplete="off" aria-label="پیام">
+    <input id="messageInput" name="message" type="text" maxlength="1000"
+           placeholder="پیامت را بنویس..." autocomplete="off" aria-label="پیام">
     <button id="sendMessageBtn" type="submit" aria-label="ارسال پیام">➤</button>
   </form>
+
   <div class="chat-actions">
-    <button class="secondary" id="nextBtn" type="button"><span data-fa="نفر بعدی" data-en="Next person">نفر بعدی</span><span aria-hidden="true">↻</span></button>
-    <button class="end-button" id="endBtn" type="button" data-fa="پایان گفتگو" data-en="End Chat">پایان گفتگو</button>
+    <button class="secondary" id="nextBtn" type="button">
+      <span data-fa="نفر بعدی" data-en="Next person">نفر بعدی</span>
+      <span aria-hidden="true">↻</span>
+    </button>
+    <button class="end-button" id="endBtn" type="button"
+            data-fa="پایان گفتگو" data-en="End Chat">پایان گفتگو</button>
   </div>
 </section>
+
 </main>
 
-<footer><span>OMEGLE</span><span class="footer-dot">•</span><span data-fa="با احترام ارتباط برقرار کن" data-en="CONNECT WITH RESPECT">با احترام ارتباط برقرار کن</span></footer>
+<footer>
+  <span>OMEGLE</span>
+  <span class="footer-dot">•</span>
+  <span data-fa="با احترام ارتباط برقرار کن"
+        data-en="CONNECT WITH RESPECT">با احترام ارتباط برقرار کن</span>
+</footer>
+
 <div class="toast hidden" id="toast" role="status"></div>
 </div>
-
-
-
- ws.addEventListener("message", async event => {
-   if (socket !== ws || thisSession !== sessionId) return;
-   let data;
-   try {
-     data = JSON.parse(event.data);
-   } catch (err) {
-     console.warn("Server sent non-JSON data");
-     return;
-   }
-   try {
-     await handleServerMessage(data, thisSession);
-   } catch (err) {
-     console.error("Message handling failed", err);
-   }
- });
-
- ws.addEventListener("error", () => {
-   if (socket !== ws) return;
-   chatSubtitle.textContent = t("serverError");
-   showToast(t("serverError"));
- });
-
- ws.addEventListener("close", () => {
-   if (socket !== ws) return;
-   socket = null;
-   matched = false;
-   searching = false;
-   cleanupPeer();
-   chatSubtitle.textContent = t("disconnected");
-   systemMessage(t("disconnected"));
-   $("findText").disabled = false;
-   $("findVideo").disabled = false;
- });
-}
-
-async function handleServerMessage(data, thisSession) {
- if (thisSession !== sessionId) return;
-
- const type = data.type || data.event;
-
- if (type === "matched" || type === "match" || type === "user_found") {
-   matched = true;
-   searching = false;
-   chatSubtitle.textContent = t("matched");
-   systemMessage(t("matched"));
-   if (mode === "video" && localStream) {
-     await createPeer(true);
-   }
-   return;
- }
-
- if (type === "waiting" || type === "searching") {
-   searching = true;
-   chatSubtitle.textContent = t("searchTitle");
-   return;
- }
-
- if (type === "message") {
-   const text = String(data.text ?? data.message ?? "").slice(0, 1000);
-   if (text) addMessage(text, false);
-   return;
- }
-
- if (type === "partner_left" || type === "user_left" || type === "disconnected") {
-   matched = false;
-   cleanupPeer();
-   chatSubtitle.textContent = t("partnerLeft");
-   systemMessage(t("partnerLeft"));
-   return;
- }
-
- if (type === "offer") {
-   if (mode !== "video") return;
-   if (!localStream && !(await enableCamera(false))) return;
-   await createPeer(false);
-   if (!peer) return;
-
-   try {
-     await peer.setRemoteDescription(new RTCSessionDescription(data.offer || data));
-     const answer = await peer.createAnswer();
-     await peer.setLocalDescription(answer);
-     send({type:"answer", answer:peer.localDescription});
-     for (const candidate of queuedIce) {
-       try { await peer.addIceCandidate(candidate); } catch (err) {}
-     }
-     queuedIce = [];
-   } catch (err) {
-     console.error(err);
-     videoStatus.textContent = t("videoFailed");
-   }
-   return;
- }
-
- if (type === "answer") {
-   if (!peer) return;
-   try {
-     await peer.setRemoteDescription(new RTCSessionDescription(data.answer || data));
-     for (const candidate of queuedIce) {
-       try { await peer.addIceCandidate(candidate); } catch (err) {}
-     }
-     queuedIce = [];
-   } catch (err) {
-     console.error(err);
-   }
-   return;
- }
-
- if (type === "ice-candidate" || type === "candidate") {
-   const candidate = data.candidate;
-   if (!candidate || !peer) return;
-   try {
-     const ice = new RTCIceCandidate(candidate);
-     if (peer.remoteDescription) await peer.addIceCandidate(ice);
-     else queuedIce.push(ice);
-   } catch (err) {
-     console.warn("ICE candidate rejected", err);
-   }
-   return;
- }
-
- if (type === "next" || type === "end") {
-   matched = false;
-   cleanupPeer();
-   systemMessage(t("partnerLeft"));
-   return;
- }
-
- if (type === "error") {
-   showToast(String(data.message || t("serverError")));
- }
-}
-
-async function createPeer(initiator) {
- cleanupPeer();
-
- const pc = new RTCPeerConnection({
-   iceServers: [
-     {urls:"stun:stun.l.google.com:19302"},
-     {urls:"stun:stun1.l.google.com:19302"}
-   ]
- });
-
- peer = pc;
-
 
 <script>
 (function () {
@@ -481,54 +572,52 @@ const cameraBtn = $("cameraBtn");
 const toast = $("toast");
 
 const copy = {
- fa: {
-  connecting:"در حال اتصال به سرور...",
-  searching:"در حال جست‌وجوی کاربر...",
-  waiting:"هنوز کاربری پیدا نشده؛ منتظر بمان...",
-  matched:"کاربر پیدا شد؛ می‌توانی گفت‌وگو کنی.",
-  disconnected:"ارتباط با سرور قطع شد. دوباره تلاش کن.",
-  sendFirst:"ابتدا به یک کاربر متصل شو.",
-  cameraReady:"دوربین فعال شد؛ در انتظار اتصال تصویر...",
-  cameraDenied:"دسترسی دوربین یا میکروفون داده نشد.",
-  videoConnected:"تماس تصویری برقرار شد.",
-  videoFailed:"اتصال تصویری برقرار نشد؛ وضعیت شبکه را بررسی کن.",
-  partnerLeft:"کاربر دیگر خارج شد.",
-  ended:"گفت‌وگو پایان یافت.",
-  reportUnavailable:"گزارش‌دهی هنوز به سرور وصل نشده است.",
-  report:"برای ایمنی اطلاعات شخصی خود را نفرست.",
-  empty:"پیام خالی ارسال نمی‌شود.",
-  serverError:"خطا در اتصال به سرور.",
-  textChat:"چت متنی",
-  videoChat:"چت تصویری",
-  connectingTitle:"در حال اتصال...",
-  searchTitle:"در جست‌وجوی کاربر...",
-  cameraButton:"فعال‌کردن دوربین و میکروفون",
-  placeholder:"پیامت را بنویس..."
- },
- en: {
-  connecting:"Connecting to server...",
-  searching:"Searching for a user...",
-  waiting:"No user found yet; keep waiting...",
-  matched:"User found. You can start chatting.",
-  disconnected:"Server connection lost. Try again.",
-  sendFirst:"Connect with a user first.",
-  cameraReady:"Camera enabled; waiting for video connection...",
-  cameraDenied:"Camera or microphone access was denied.",
-  videoConnected:"Video call connected.",
-  videoFailed:"Video connection failed. Check your network.",
-  partnerLeft:"The other user left.",
-  ended:"Chat ended.",
-  reportUnavailable:"Reporting is not connected to the server yet.",
-  report:"For your safety, do not share personal information.",
-  empty:"Empty messages cannot be sent.",
-  serverError:"Server connection error.",
-  textChat:"Text Chat",
-  videoChat:"Video Chat",
-  connectingTitle:"Connecting...",
-  searchTitle:"Searching for a user...",
-  cameraButton:"Enable Camera & Microphone",
-  placeholder:"Type your message..."
- }
+  fa: {
+    connecting:"در حال اتصال به سرور...",
+    searching:"در حال جست‌وجوی کاربر...",
+    waiting:"هنوز کاربری پیدا نشده؛ منتظر بمان...",
+    matched:"کاربر پیدا شد؛ می‌توانی گفت‌وگو کنی.",
+    disconnected:"ارتباط با سرور قطع شد. دوباره تلاش کن.",
+    sendFirst:"ابتدا به یک کاربر متصل شو.",
+    cameraReady:"دوربین فعال شد؛ در انتظار اتصال تصویر...",
+    cameraDenied:"دسترسی دوربین یا میکروفون داده نشد.",
+    videoConnected:"تماس تصویری برقرار شد.",
+    videoFailed:"اتصال تصویری برقرار نشد؛ وضعیت شبکه را بررسی کن.",
+    partnerLeft:"کاربر دیگر خارج شد.",
+    ended:"گفت‌وگو پایان یافت.",
+    reportUnavailable:"گزارش‌دهی هنوز به سرور وصل نشده است.",
+    report:"برای ایمنی اطلاعات شخصی خود را نفرست.",
+    empty:"پیام خالی ارسال نمی‌شود.",
+    serverError:"خطا در اتصال به سرور.",
+    textChat:"چت متنی",
+    videoChat:"چت تصویری",
+    searchTitle:"در جست‌وجوی کاربر...",
+    cameraButton:"فعال‌کردن دوربین و میکروفون",
+    placeholder:"پیامت را بنویس..."
+  },
+  en: {
+    connecting:"Connecting to server...",
+    searching:"Searching for a user...",
+    waiting:"No user found yet; keep waiting...",
+    matched:"User found. You can start chatting.",
+    disconnected:"Server connection lost. Try again.",
+    sendFirst:"Connect with a user first.",
+    cameraReady:"Camera enabled; waiting for video connection...",
+    cameraDenied:"Camera or microphone access was denied.",
+    videoConnected:"Video call connected.",
+    videoFailed:"Video connection failed. Check your network.",
+    partnerLeft:"The other user left.",
+    ended:"Chat ended.",
+    reportUnavailable:"Reporting is not connected to the server yet.",
+    report:"For your safety, do not share personal information.",
+    empty:"Empty messages cannot be sent.",
+    serverError:"Server connection error.",
+    textChat:"Text Chat",
+    videoChat:"Video Chat",
+    searchTitle:"Searching for a user...",
+    cameraButton:"Enable Camera & Microphone",
+    placeholder:"Type your message..."
+  }
 };
 
 let language = "fa";
@@ -542,622 +631,639 @@ let peer = null;
 let toastTimer = null;
 let sessionId = 0;
 let pendingIce = [];
-let makingOffer = false;
+let cameraRequestId = 0;
 
 function t(key) {
- return (copy[language] && copy[language][key]) || copy.fa[key] || key;
+  return (copy[language] && copy[language][key]) || copy.fa[key] || key;
 }
 
 function showToast(text) {
- toast.textContent = text;
- toast.classList.remove("hidden");
- clearTimeout(toastTimer);
- toastTimer = setTimeout(() => toast.classList.add("hidden"), 3200);
+  toast.textContent = text;
+  toast.classList.remove("hidden");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.add("hidden"), 3200);
 }
 
 function systemMessage(text) {
- const el = document.createElement("div");
- el.className = "system-message";
- el.textContent = text;
- messages.appendChild(el);
- messages.scrollTop = messages.scrollHeight;
+  const el = document.createElement("div");
+  el.className = "system-message";
+  el.textContent = text;
+  messages.appendChild(el);
+  messages.scrollTop = messages.scrollHeight;
 }
 
 function addMessage(text, mine) {
- const el = document.createElement("div");
- el.className = "message " + (mine ? "mine" : "theirs");
- el.textContent = text;
- messages.appendChild(el);
- messages.scrollTop = messages.scrollHeight;
+  const el = document.createElement("div");
+  el.className = "message " + (mine ? "mine" : "theirs");
+  el.textContent = text;
+  messages.appendChild(el);
+  messages.scrollTop = messages.scrollHeight;
 }
 
 function clearMessages(text) {
- messages.replaceChildren();
- systemMessage(text);
+  messages.replaceChildren();
+  systemMessage(text);
 }
 
 function translatePage() {
- app.querySelectorAll("[data-fa][data-en]").forEach(el => {
-   el.textContent = language === "en"
-     ? el.getAttribute("data-en")
-     : el.getAttribute("data-fa");
- });
+  app.querySelectorAll("[data-fa][data-en]").forEach(el => {
+    if (el.matches(".home h1")) return;
 
- const headline = app.querySelector(".home h1");
- if (headline) {
-   headline.innerHTML = language === "en"
-     ? "MEET SOMEONE<br><span>NEW.</span>"
-     : "با دنیای جدید<br><span>آشنا شو.</span>";
- }
+    el.textContent = language === "en"
+      ? el.getAttribute("data-en")
+      : el.getAttribute("data-fa");
+  });
 
- $("langFa").classList.toggle("active", language === "fa");
- $("langEn").classList.toggle("active", language === "en");
- $("langFa").setAttribute("aria-pressed", String(language === "fa"));
- $("langEn").setAttribute("aria-pressed", String(language === "en"));
+  const headline = app.querySelector(".home h1");
+  if (headline) {
+    headline.innerHTML = language === "en"
+      ? "MEET SOMEONE<br><span>NEW.</span>"
+      : "با دنیای جدید<br><span>آشنا شو.</span>";
+  }
 
- app.lang = language;
- app.dir = language === "en" ? "ltr" : "rtl";
- document.documentElement.lang = language;
- document.documentElement.dir = app.dir;
+  $("langFa").classList.toggle("active", language === "fa");
+  $("langEn").classList.toggle("active", language === "en");
+  $("langFa").setAttribute("aria-pressed", String(language === "fa"));
+  $("langEn").setAttribute("aria-pressed", String(language === "en"));
 
- messageInput.placeholder = t("placeholder");
- chatTitle.textContent = mode === "video" ? t("videoChat") : t("textChat");
- cameraBtn.textContent = t("cameraButton");
+  app.lang = language;
+  app.dir = language === "en" ? "ltr" : "rtl";
+  document.documentElement.lang = language;
+  document.documentElement.dir = app.dir;
+
+  messageInput.placeholder = t("placeholder");
+  chatTitle.textContent = mode === "video" ? t("videoChat") : t("textChat");
+  cameraBtn.textContent = t("cameraButton");
 }
 
 $("langFa").addEventListener("click", () => {
- language = "fa";
- translatePage();
+  language = "fa";
+  translatePage();
 });
 
 $("langEn").addEventListener("click", () => {
- language = "en";
- translatePage();
+  language = "en";
+  translatePage();
 });
 
 function send(data) {
- if (!socket || socket.readyState !== WebSocket.OPEN) {
-   showToast(t("disconnected"));
-   return false;
- }
+  if (!socket || socket.readyState !== WebSocket.OPEN) {
+    showToast(t("disconnected"));
+    return false;
+  }
 
- try {
-   socket.send(JSON.stringify(data));
-   return true;
- } catch (err) {
-   console.error("WebSocket send failed:", err);
-   showToast(t("serverError"));
-   return false;
- }
+  try {
+    socket.send(JSON.stringify(data));
+    return true;
+  } catch (err) {
+    console.error("WebSocket send failed:", err);
+    showToast(t("serverError"));
+    return false;
+  }
 }
 
-function cleanupPeer(clearPending = true) {
- const oldPeer = peer;
- peer = null;
+function cleanupPeer(clearCandidates = true) {
+  const oldPeer = peer;
+  peer = null;
 
- if (oldPeer) {
-   oldPeer.onicecandidate = null;
-   oldPeer.ontrack = null;
-   oldPeer.onconnectionstatechange = null;
-   oldPeer.oniceconnectionstatechange = null;
+  if (oldPeer) {
+    oldPeer.onicecandidate = null;
+    oldPeer.ontrack = null;
+    oldPeer.onconnectionstatechange = null;
+    oldPeer.oniceconnectionstatechange = null;
 
-   try {
-     oldPeer.close();
-   } catch (err) {
-     console.warn("Peer cleanup:", err);
-   }
- }
+    try {
+      oldPeer.close();
+    } catch (err) {
+      console.warn("Peer cleanup failed:", err);
+    }
+  }
 
- makingOffer = false;
- remoteVideo.srcObject = null;
- remoteVideoPlaceholder.classList.remove("hidden");
+  if (clearCandidates) pendingIce = [];
 
- if (clearPending) pendingIce = [];
+  remoteVideo.srcObject = null;
+  remoteVideoPlaceholder.classList.remove("hidden");
 }
 
 function stopLocal() {
- if (localStream) {
-   localStream.getTracks().forEach(track => track.stop());
- }
+  cameraRequestId++;
 
- localStream = null;
- localVideo.srcObject = null;
- videoPlaceholder.classList.remove("hidden");
+  if (localStream) {
+    localStream.getTracks().forEach(track => track.stop());
+  }
+
+  localStream = null;
+  localVideo.srcObject = null;
+  videoPlaceholder.classList.remove("hidden");
 }
 
 function closeConnection() {
- sessionId++;
- matched = false;
- searching = false;
- isInitiator = false;
+  sessionId++;
+  matched = false;
+  searching = false;
+  isInitiator = false;
 
- cleanupPeer(true);
- stopLocal();
+  cleanupPeer(true);
+  stopLocal();
 
- const oldSocket = socket;
- socket = null;
+  const oldSocket = socket;
+  socket = null;
 
- if (oldSocket) {
-   try {
-     oldSocket.close();
-   } catch (err) {
-     console.warn(err);
-   }
- }
+  if (oldSocket) {
+    try {
+      oldSocket.close();
+    } catch (err) {
+      console.warn("Socket close failed:", err);
+    }
+  }
 }
 
 function openChat(nextMode) {
- closeConnection();
+  closeConnection();
 
- mode = nextMode;
- home.classList.add("hidden");
- chat.classList.remove("hidden");
- videoArea.classList.toggle("hidden", mode !== "video");
+  mode = nextMode;
+  home.classList.add("hidden");
+  chat.classList.remove("hidden");
+  videoArea.classList.toggle("hidden", mode !== "video");
 
- chatTitle.textContent = mode === "video" ? t("videoChat") : t("textChat");
- chatSubtitle.textContent = t("connecting");
- videoStatus.textContent = t("cameraReady");
- clearMessages(t("connecting"));
+  chatTitle.textContent = mode === "video" ? t("videoChat") : t("textChat");
+  chatSubtitle.textContent = t("connecting");
+  videoStatus.textContent = t("cameraReady");
 
- $("findText").disabled = true;
- $("findVideo").disabled = true;
+  clearMessages(t("connecting"));
 
- connect();
+  $("findText").disabled = true;
+  $("findVideo").disabled = true;
+
+  connect();
 }
 
 function connect() {
- const thisSession = sessionId;
- searching = true;
+  const thisSession = sessionId;
+  searching = true;
 
- chatSubtitle.textContent = t("connecting");
+  chatSubtitle.textContent = t("connecting");
 
- let ws;
+  let ws;
 
- try {
-   ws = new WebSocket(SERVER_URL);
- } catch (err) {
-   searching = false;
-   chatSubtitle.textContent = t("serverError");
-   systemMessage(t("serverError"));
-   $("findText").disabled = false;
-   $("findVideo").disabled = false;
-   return;
- }
+  try {
+    ws = new WebSocket(SERVER_URL);
+  } catch (err) {
+    searching = false;
+    chatSubtitle.textContent = t("serverError");
+    systemMessage(t("serverError"));
+    $("findText").disabled = false;
+    $("findVideo").disabled = false;
+    return;
+  }
 
- socket = ws;
+  socket = ws;
 
- ws.addEventListener("open", () => {
-   if (socket !== ws || thisSession !== sessionId) return;
+  ws.addEventListener("open", () => {
+    if (socket !== ws || thisSession !== sessionId) return;
 
-   chatSubtitle.textContent = t("searching");
-   systemMessage(t("searching"));
-   send({ type: "find", mode });
- });
+    chatSubtitle.textContent = t("searching");
+    systemMessage(t("searching"));
+    send({ type: "find", mode });
+  });
 
- ws.addEventListener("message", async event => {
-   if (socket !== ws || thisSession !== sessionId) return;
+  ws.addEventListener("message", async event => {
+    if (socket !== ws || thisSession !== sessionId) return;
 
-   let data;
+    let data;
 
-   try {
-     data = JSON.parse(event.data);
-   } catch (err) {
-     console.warn("Server sent invalid JSON");
-     return;
-   }
+    try {
+      data = JSON.parse(event.data);
+    } catch (err) {
+      console.warn("Server sent invalid JSON");
+      return;
+    }
 
-   try {
-     await handleServerMessage(data, thisSession);
-   } catch (err) {
-     console.error("Server message handling failed:", err);
-     videoStatus.textContent = t("videoFailed");
-   }
- });
+    try {
+      await handleServerMessage(data, thisSession);
+    } catch (err) {
+      console.error("Server message handling failed:", err);
+      videoStatus.textContent = t("videoFailed");
+    }
+  });
 
- ws.addEventListener("error", () => {
-   if (socket !== ws || thisSession !== sessionId) return;
+  ws.addEventListener("error", () => {
+    if (socket !== ws || thisSession !== sessionId) return;
 
-   chatSubtitle.textContent = t("serverError");
-   showToast(t("serverError"));
- });
+    chatSubtitle.textContent = t("serverError");
+    showToast(t("serverError"));
+  });
 
- ws.addEventListener("close", () => {
-   if (socket !== ws || thisSession !== sessionId) return;
+  ws.addEventListener("close", () => {
+    if (socket !== ws || thisSession !== sessionId) return;
 
-   socket = null;
-   matched = false;
-   searching = false;
-   isInitiator = false;
+    socket = null;
+    matched = false;
+    searching = false;
+    isInitiator = false;
 
-   cleanupPeer(true);
+    cleanupPeer(true);
 
-   chatSubtitle.textContent = t("disconnected");
-   systemMessage(t("disconnected"));
+    chatSubtitle.textContent = t("disconnected");
+    systemMessage(t("disconnected"));
 
-   $("findText").disabled = false;
-   $("findVideo").disabled = false;
- });
+    $("findText").disabled = false;
+    $("findVideo").disabled = false;
+  });
 }
 
 async function flushPendingIce(pc) {
- if (!pc || !pc.remoteDescription) return;
+  if (!pc || !pc.remoteDescription) return;
 
- const candidates = pendingIce.splice(0);
+  const candidates = pendingIce.splice(0);
 
- for (const candidate of candidates) {
-   if (peer !== pc) return;
+  for (const candidate of candidates) {
+    if (peer !== pc) return;
 
-   try {
-     await pc.addIceCandidate(candidate);
-   } catch (err) {
-     console.warn("Could not add queued ICE candidate:", err);
-   }
- }
+    try {
+      await pc.addIceCandidate(candidate);
+    } catch (err) {
+      console.warn("Could not add queued ICE candidate:", err);
+    }
+  }
 }
 
 async function handleServerMessage(data, thisSession) {
- if (thisSession !== sessionId) return;
+  if (thisSession !== sessionId) return;
 
- const type = data.type || data.event;
+  const type = data.type || data.event;
 
- if (type === "matched" || type === "match" || type === "user_found") {
-   matched = true;
-   searching = false;
-   isInitiator = data.initiator === true;
+  if (type === "connected") {
+    return;
+  }
 
-   chatSubtitle.textContent = t("matched");
-   systemMessage(t("matched"));
+  if (type === "matched" || type === "match" || type === "user_found") {
+    matched = true;
+    searching = false;
+    isInitiator = data.initiator === true;
 
-   if (mode === "video" && localStream) {
-     await createPeer(isInitiator);
-   }
+    chatSubtitle.textContent = t("matched");
+    systemMessage(t("matched"));
 
-   return;
- }
+    if (mode === "video" && localStream) {
+      await createPeer(isInitiator);
+    }
 
- if (type === "waiting" || type === "searching") {
-   searching = true;
-   chatSubtitle.textContent = t("searchTitle");
-   return;
- }
+    return;
+  }
 
- if (type === "message") {
-   const text = String(data.text ?? data.message ?? "").slice(0, 1000);
-   if (text) addMessage(text, false);
-   return;
- }
+  if (type === "waiting" || type === "searching") {
+    searching = true;
+    chatSubtitle.textContent = t("searchTitle");
+    return;
+  }
 
- if (
-   type === "partner_left" ||
-   type === "user_left" ||
-   type === "disconnected"
- ) {
-   matched = false;
-   isInitiator = false;
+  if (type === "message") {
+    const text = String(data.text ?? data.message ?? "").slice(0, 1000);
+    if (text) addMessage(text, false);
+    return;
+  }
 
-   cleanupPeer(true);
+  if (
+    type === "partner_left" ||
+    type === "user_left" ||
+    type === "disconnected"
+  ) {
+    matched = false;
+    isInitiator = false;
 
-   chatSubtitle.textContent = t("partnerLeft");
-   videoStatus.textContent = t("partnerLeft");
-   systemMessage(t("partnerLeft"));
-   return;
- }
+    cleanupPeer(true);
 
- if (type === "offer") {
-   if (mode !== "video") return;
+    chatSubtitle.textContent = t("partnerLeft");
+    videoStatus.textContent = t("partnerLeft");
+    systemMessage(t("partnerLeft"));
+    return;
+  }
 
-   if (!matched) {
-     console.warn("Offer received without an active match");
-     return;
-   }
+  if (type === "offer") {
+    if (mode !== "video" || !matched) return;
 
-   if (!localStream) {
-     const ok = await enableCamera(false);
-     if (!ok) return;
-   }
+    if (!localStream) {
+      const ok = await enableCamera(false);
+      if (!ok || !matched || thisSession !== sessionId) return;
+    }
 
-   let pc = peer;
+    let pc = peer;
 
-   if (!pc) {
-     pc = await createPeer(false);
-   }
+    if (!pc) {
+      pc = await createPeer(false);
+    }
 
-   if (!pc || peer !== pc) return;
+    if (!pc || peer !== pc) return;
 
-   const offerDescription = data.offer || data.description || data;
+    const offerDescription = data.offer || data.description || data;
 
-   if (!offerDescription.sdp) {
-     console.warn("Offer did not contain SDP");
-     return;
-   }
+    if (!offerDescription || typeof offerDescription.sdp !== "string") {
+      console.warn("Offer did not contain SDP");
+      return;
+    }
 
-   try {
-     await pc.setRemoteDescription(
-       new RTCSessionDescription(offerDescription)
-     );
+    try {
+      await pc.setRemoteDescription(
+        new RTCSessionDescription(offerDescription)
+      );
 
-     await flushPendingIce(pc);
+      if (peer !== pc) return;
 
-     const answer = await pc.createAnswer();
+      await flushPendingIce(pc);
 
-     if (peer !== pc) return;
+      const answer = await pc.createAnswer();
 
-     await pc.setLocalDescription(answer);
+      if (peer !== pc) return;
 
-     send({
-       type: "answer",
-       answer: pc.localDescription
-     });
+      await pc.setLocalDescription(answer);
 
-     videoStatus.textContent = t("cameraReady");
-   } catch (err) {
-     console.error("Offer/answer negotiation failed:", err);
-     videoStatus.textContent = t("videoFailed");
-   }
+      if (peer !== pc) return;
 
-   return;
- }
+      send({
+        type: "answer",
+        answer: pc.localDescription
+      });
 
- if (type === "answer") {
-   const pc = peer;
-   if (!pc) {
-     console.warn("Answer received before peer was created");
-     return;
-   }
+      videoStatus.textContent = t("cameraReady");
+    } catch (err) {
+      console.error("Offer/answer negotiation failed:", err);
+      videoStatus.textContent = t("videoFailed");
+    }
 
-   const answerDescription = data.answer || data.description || data;
+    return;
+  }
 
-   if (!answerDescription.sdp) {
-     console.warn("Answer did not contain SDP");
-     return;
-   }
+  if (type === "answer") {
+    const pc = peer;
 
-   try {
-     await pc.setRemoteDescription(
-       new RTCSessionDescription(answerDescription)
-     );
+    if (!pc) {
+      console.warn("Answer received before peer was created");
+      return;
+    }
 
-     await flushPendingIce(pc);
-   } catch (err) {
-     console.error("Setting remote answer failed:", err);
-     videoStatus.textContent = t("videoFailed");
-   }
+    const answerDescription = data.answer || data.description || data;
 
-   return;
- }
+    if (!answerDescription || typeof answerDescription.sdp !== "string") {
+      console.warn("Answer did not contain SDP");
+      return;
+    }
 
- if (type === "ice-candidate" || type === "candidate") {
-   const candidateData = data.candidate;
+    try {
+      await pc.setRemoteDescription(
+        new RTCSessionDescription(answerDescription)
+      );
 
-   if (!candidateData) return;
+      if (peer !== pc) return;
 
-   try {
-     const candidate = new RTCIceCandidate(candidateData);
-     const pc = peer;
+      await flushPendingIce(pc);
+    } catch (err) {
+      console.error("Setting remote answer failed:", err);
+      videoStatus.textContent = t("videoFailed");
+    }
 
-     if (pc && pc.remoteDescription) {
-       await pc.addIceCandidate(candidate);
-     } else {
-       pendingIce.push(candidate);
-     }
-   } catch (err) {
-     console.warn("ICE candidate handling failed:", err);
-   }
+    return;
+  }
 
-   return;
- }
+  if (type === "ice-candidate" || type === "candidate") {
+    const candidateData = data.candidate;
+    if (!candidateData) return;
 
- if (type === "next" || type === "end" || type === "ended") {
-   matched = false;
-   isInitiator = false;
+    try {
+      const candidate = new RTCIceCandidate(candidateData);
+      const pc = peer;
 
-   cleanupPeer(true);
-   systemMessage(t("partnerLeft"));
-   return;
- }
+      if (pc && pc.remoteDescription) {
+        await pc.addIceCandidate(candidate);
+      } else {
+        pendingIce.push(candidate);
+      }
+    } catch (err) {
+      console.warn("ICE candidate handling failed:", err);
+    }
 
- if (type === "error") {
-   console.warn("Server error:", data.message);
-   showToast(String(data.message || t("serverError")));
- }
+    return;
+  }
+
+  if (type === "next" || type === "end" || type === "ended") {
+    matched = false;
+    isInitiator = false;
+    cleanupPeer(true);
+    systemMessage(t("partnerLeft"));
+    return;
+  }
+
+  if (type === "error") {
+    console.warn("Server error:", data.message);
+    showToast(String(data.message || t("serverError")));
+  }
 }
 
 async function createPeer(initiator) {
- if (peer) return peer;
+  if (peer) return peer;
 
- const pc = new RTCPeerConnection({
-   iceServers: [
-     { urls: "stun:stun.l.google.com:19302" },
-     { urls: "stun:stun1.l.google.com:19302" }
-   ]
- });
+  if (!matched || mode !== "video") return null;
 
- peer = pc;
+  const pc = new RTCPeerConnection({
+    iceServers: [
+      { urls: "stun:stun.l.google.com:19302" },
+      { urls: "stun:stun1.l.google.com:19302" }
+    ]
+  });
 
- if (localStream) {
-   localStream.getTracks().forEach(track => {
-     pc.addTrack(track, localStream);
-   });
- }
+  peer = pc;
 
- pc.onicecandidate = event => {
-   if (peer !== pc || !event.candidate) return;
+  if (localStream) {
+    localStream.getTracks().forEach(track => {
+      pc.addTrack(track, localStream);
+    });
+  }
 
-   send({
-     type: "ice-candidate",
-     candidate: event.candidate
-   });
- };
+  pc.onicecandidate = event => {
+    if (peer !== pc || !event.candidate) return;
 
- pc.ontrack = event => {
-   if (peer !== pc) return;
+    send({
+      type: "ice-candidate",
+      candidate: event.candidate
+    });
+  };
 
-   if (event.streams && event.streams[0]) {
-     remoteVideo.srcObject = event.streams[0];
-   } else {
-     let stream = remoteVideo.srcObject;
+  pc.ontrack = event => {
+    if (peer !== pc) return;
 
-     if (!(stream instanceof MediaStream)) {
-       stream = new MediaStream();
-       remoteVideo.srcObject = stream;
-     }
+    if (event.streams && event.streams[0]) {
+      remoteVideo.srcObject = event.streams[0];
+    } else {
+      let stream = remoteVideo.srcObject;
 
-     const exists = stream.getTracks().some(
-       track => track.id === event.track.id
-     );
+      if (!(stream instanceof MediaStream)) {
+        stream = new MediaStream();
+        remoteVideo.srcObject = stream;
+      }
 
-     if (!exists) stream.addTrack(event.track);
-   }
+      const exists = stream.getTracks().some(
+        track => track.id === event.track.id
+      );
 
-   remoteVideoPlaceholder.classList.add("hidden");
-   videoStatus.textContent = t("videoConnected");
+      if (!exists) stream.addTrack(event.track);
+    }
 
-   remoteVideo.play().catch(err => {
-     console.warn("Remote video autoplay was blocked:", err);
-   });
- };
+    remoteVideoPlaceholder.classList.add("hidden");
+    videoStatus.textContent = t("videoConnected");
 
- pc.onconnectionstatechange = () => {
-   if (peer !== pc) return;
+    remoteVideo.play().catch(err => {
+      console.warn("Remote video autoplay was blocked:", err);
+    });
+  };
 
-   console.log("WebRTC connection state:", pc.connectionState);
+  pc.onconnectionstatechange = () => {
+    if (peer !== pc) return;
 
-   if (pc.connectionState === "connected") {
-     videoStatus.textContent = t("videoConnected");
-   } else if (
-     pc.connectionState === "failed" ||
-     pc.connectionState === "disconnected"
-   ) {
-     videoStatus.textContent = t("videoFailed");
-   }
- };
+    console.log("WebRTC connection state:", pc.connectionState);
 
- pc.oniceconnectionstatechange = () => {
-   if (peer !== pc) return;
+    if (pc.connectionState === "connected") {
+      videoStatus.textContent = t("videoConnected");
+    } else if (pc.connectionState === "failed") {
+      videoStatus.textContent = t("videoFailed");
+    } else if (pc.connectionState === "disconnected") {
+      videoStatus.textContent = t("videoFailed");
+    }
+  };
 
-   console.log("ICE connection state:", pc.iceConnectionState);
+  pc.oniceconnectionstatechange = () => {
+    if (peer !== pc) return;
 
-   if (pc.iceConnectionState === "failed") {
-     videoStatus.textContent = t("videoFailed");
-   }
- };
+    console.log("ICE connection state:", pc.iceConnectionState);
 
- pc.onicegatheringstatechange = () => {
-   if (peer === pc) {
-     console.log("ICE gathering state:", pc.iceGatheringState);
-   }
- };
+    if (pc.iceConnectionState === "failed") {
+      videoStatus.textContent = t("videoFailed");
+    }
+  };
 
- if (initiator) {
-   try {
-     makingOffer = true;
+  pc.onicegatheringstatechange = () => {
+    if (peer === pc) {
+      console.log("ICE gathering state:", pc.iceGatheringState);
+    }
+  };
 
-     const offer = await pc.createOffer();
+  if (initiator) {
+    try {
+      const offer = await pc.createOffer();
 
-     if (peer !== pc) return null;
+      if (peer !== pc) return null;
 
-     await pc.setLocalDescription(offer);
+      await pc.setLocalDescription(offer);
 
-     if (peer !== pc) return null;
+      if (peer !== pc) return null;
 
-     send({
-       type: "offer",
-       offer: pc.localDescription
-     });
-   } catch (err) {
-     console.error("Creating offer failed:", err);
-     videoStatus.textContent = t("videoFailed");
-   } finally {
-     makingOffer = false;
-   }
- }
+      send({
+        type: "offer",
+        offer: pc.localDescription
+      });
+    } catch (err) {
+      console.error("Creating offer failed:", err);
+      videoStatus.textContent = t("videoFailed");
+    }
+  }
 
- return pc;
+  return pc;
 }
 
 async function enableCamera(showMessage = true) {
- try {
-   if (!navigator.mediaDevices ||
-       !navigator.mediaDevices.getUserMedia) {
-     throw new Error("Camera API unavailable");
-   }
+  if (localStream) {
+    if (matched && mode === "video") {
+      await createPeer(isInitiator);
+    }
+    return true;
+  }
 
-   if (!localStream) {
-     localStream = await navigator.mediaDevices.getUserMedia({
-       video: true,
-       audio: true
-     });
+  const requestId = ++cameraRequestId;
+  const thisSession = sessionId;
 
-     localVideo.srcObject = localStream;
-     videoPlaceholder.classList.add("hidden");
+  try {
+    if (!navigator.mediaDevices ||
+        !navigator.mediaDevices.getUserMedia) {
+      throw new Error("Camera API unavailable; use HTTPS.");
+    }
 
-     localVideo.play().catch(err => {
-       console.warn("Local video autoplay was blocked:", err);
-     });
-   }
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true
+    });
 
-   videoStatus.textContent = t("cameraReady");
+    if (requestId !== cameraRequestId || thisSession !== sessionId) {
+      stream.getTracks().forEach(track => track.stop());
+      return false;
+    }
 
-   if (matched && mode === "video") {
-     await createPeer(isInitiator);
-   } else if (showMessage) {
-     showToast(t("cameraReady"));
-   }
+    localStream = stream;
+    localVideo.srcObject = stream;
+    videoPlaceholder.classList.add("hidden");
 
-   return true;
- } catch (err) {
-   console.error("Camera/microphone access failed:", err);
+    localVideo.play().catch(err => {
+      console.warn("Local video autoplay was blocked:", err);
+    });
 
-   videoStatus.textContent = t("cameraDenied");
-   showToast(t("cameraDenied"));
+    videoStatus.textContent = t("cameraReady");
 
-   return false;
- }
+    if (matched && mode === "video") {
+      await createPeer(isInitiator);
+    } else if (showMessage) {
+      showToast(t("cameraReady"));
+    }
+
+    return true;
+  } catch (err) {
+    console.error("Camera/microphone access failed:", err);
+
+    videoStatus.textContent = t("cameraDenied");
+    showToast(t("cameraDenied"));
+
+    return false;
+  }
 }
 
 function findNext() {
- if (searching) {
-   showToast(t("searching"));
-   return;
- }
+  if (searching) {
+    showToast(t("searching"));
+    return;
+  }
 
- if (!socket || socket.readyState !== WebSocket.OPEN) {
-   closeConnection();
-   connect();
-   return;
- }
+  if (!socket || socket.readyState !== WebSocket.OPEN) {
+    closeConnection();
+    connect();
+    return;
+  }
 
- // The server handles disconnecting the current partner
- // and searching for the next user after receiving "next".
- if (!send({ type: "next" })) return;
+  if (!send({ type: "next" })) return;
 
- matched = false;
- searching = true;
- isInitiator = false;
+  matched = false;
+  searching = true;
+  isInitiator = false;
 
- cleanupPeer(true);
- stopLocal();
+  cleanupPeer(true);
+  stopLocal();
 
- clearMessages(t("searching"));
- chatSubtitle.textContent = t("searching");
- videoStatus.textContent = t("cameraReady");
+  clearMessages(t("searching"));
+  chatSubtitle.textContent = t("searching");
+  videoStatus.textContent = t("cameraReady");
 }
 
 function endChat() {
- if (socket && socket.readyState === WebSocket.OPEN) {
-   send({ type: "end" });
- }
+  if (socket && socket.readyState === WebSocket.OPEN) {
+    send({ type: "end" });
+  }
 
- closeConnection();
+  closeConnection();
 
- chat.classList.add("hidden");
- home.classList.remove("hidden");
- videoArea.classList.add("hidden");
+  chat.classList.add("hidden");
+  home.classList.remove("hidden");
+  videoArea.classList.add("hidden");
 
- $("findText").disabled = false;
- $("findVideo").disabled = false;
+  $("findText").disabled = false;
+  $("findVideo").disabled = false;
 
- showToast(t("ended"));
+  showToast(t("ended"));
 }
 
 $("findText").addEventListener("click", () => openChat("text"));
@@ -1168,51 +1274,54 @@ $("nextBtn").addEventListener("click", findNext);
 $("cameraBtn").addEventListener("click", () => enableCamera(true));
 
 $("reportBtn").addEventListener("click", () => {
- showToast(t("reportUnavailable"));
- systemMessage(t("report"));
+  showToast(t("reportUnavailable"));
+  systemMessage(t("report"));
 });
 
 messageForm.addEventListener("submit", event => {
- event.preventDefault();
+  event.preventDefault();
 
- const text = messageInput.value.trim();
+  const text = messageInput.value.trim();
 
- if (!text) {
-   showToast(t("empty"));
-   return;
- }
+  if (!text) {
+    showToast(t("empty"));
+    return;
+  }
 
- if (!matched) {
-   showToast(t("sendFirst"));
-   return;
- }
+  if (!matched) {
+    showToast(t("sendFirst"));
+    return;
+  }
 
- if (send({ type: "message", text })) {
-   addMessage(text, true);
-   messageInput.value = "";
-   messageInput.focus();
- }
+  if (send({ type: "message", text })) {
+    addMessage(text, true);
+    messageInput.value = "";
+    messageInput.focus();
+  }
 });
 
 window.addEventListener("beforeunload", () => {
- if (socket) {
-   try {
-     socket.close();
-   } catch (err) {}
- }
+  if (socket) {
+    try {
+      socket.close();
+    } catch (err) {
+      console.warn(err);
+    }
+  }
 
- stopLocal();
- cleanupPeer(true);
+  stopLocal();
+  cleanupPeer(true);
 });
 
 if (window.Telegram && window.Telegram.WebApp) {
- window.Telegram.WebApp.ready();
- window.Telegram.WebApp.expand();
+  window.Telegram.WebApp.ready();
+  window.Telegram.WebApp.expand();
 }
 
 translatePage();
 console.log("OMEGLE frontend loaded");
 })();
 </script>
+
 </body>
 </html>
