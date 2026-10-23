@@ -407,18 +407,22 @@ textarea {
     #08080c;
 }
 
+
 .video-card video {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   background: #08080c;
+
+  /* نمایش طبیعی تصویر، بدون وارونگی افقی */
   transform: none;
 }
 
+/* تصویر خود کاربر و مخاطب هر دو بدون آینه‌ای شدن */
 #localVideo,
 #remoteVideo {
-  transform: none !important;
+  transform: none!important;
 }
 
 .video-placeholder {
