@@ -420,9 +420,11 @@ textarea {
 }
 
 /* تصویر خود کاربر و مخاطب هر دو بدون آینه‌ای شدن */
+
 #localVideo,
 #remoteVideo {
-  transform: none!important;
+  transform: scaleX(1) !important;
+  -webkit-transform: scaleX(1) !important;
 }
 
 .video-placeholder {
